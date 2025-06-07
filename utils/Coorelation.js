@@ -15,7 +15,7 @@ const coorelation = async (req, res, next) => {
         req.headers[CONSTANTS.HEADERS.COORELATION_ID] = corId;
         res.set(CONSTANTS.HEADERS.COORELATION_ID, corId);
         next();
-      }
+      },
     );
   };
   const id = req?.get(CONSTANTS.HEADERS.COORELATION_ID);

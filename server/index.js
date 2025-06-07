@@ -7,6 +7,7 @@ const app = express();
 
 app.use(express.json());
 app.use(coorelation);
+app.use(cors("*"));
 
 app.use((req, res, next) => {
   const regex = /^\/api\/(user|product)(?:\/.*)?$/;
@@ -26,6 +27,6 @@ app.listen(ENVIRONMENT.PORT, () =>
   logger.info(
     `SERVER STARTED ON PORT ${
       ENVIRONMENT.PORT
-    } AT ${new Date().toLocaleString()}`
-  )
+    } AT ${new Date().toLocaleString()}`,
+  ),
 );
