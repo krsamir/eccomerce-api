@@ -14,11 +14,11 @@ const logger = winston.createLogger({
       method !== "N/A" &&
       message === CONSTANTS.ROUTE_LOGS
     ) {
-      return `[${new Date().toISOString()}] [correlationId=${correlationId}] ${level.toUpperCase()} [PATH]=[${path}] [METHOD]=[${method}] ${
+      return `[${new Date().toISOString()}] [correlationId=${correlationId}] ${level.toUpperCase()} [PATH=${path}] [METHOD=${method}] ${
         message === CONSTANTS.ROUTE_LOGS ? "" : `: ${message}`
       }`;
     }
-    return `[${new Date().toISOString()}] [correlationId=${correlationId}] ${level.toUpperCase()}: ${message}`;
+    return `[${new Date().toISOString()}] ${correlationId !== "N/A" ? `[correlationId=${correlationId}]` : ""} ${level.toUpperCase()}: ${message}`;
   }),
   transports: [new winston.transports.Console()],
 });
