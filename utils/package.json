@@ -1,0 +1,17 @@
+{
+  "name": "@ecom/utils",
+  "version": "1.0.0",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "correlation-id": "^5.2.0",
+    "dotenv": "^16.5.0",
+    "winston": "^3.17.0"
+  }
+}

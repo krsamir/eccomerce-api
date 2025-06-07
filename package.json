@@ -1,0 +1,26 @@
+{
+  "name": "eccomerce-api",
+  "version": "1.0.0",
+  "main": "index.js",
+  "type": "module",
+  "private": true,
+  "workspaces": [
+    "utils",
+    "server"
+  ],
+  "scripts": {
+    "start": "node server/index.js",
+    "dev": "nodemon server/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/krsamir/eccomerce-api.git"
+  },
+  "author": "samir",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/krsamir/eccomerce-api/issues"
+  },
+  "homepage": "https://github.com/krsamir/eccomerce-api#readme",
+  "description": ""
+}
