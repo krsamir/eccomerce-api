@@ -12,6 +12,7 @@
   "description": "",
   "dependencies": {
     "@ecom/utils": "*",
+    "cors": "^2.8.5",
     "express": "^5.1.0"
   }
 }

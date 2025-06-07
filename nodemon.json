@@ -1,0 +1,4 @@
+{
+  "watch": ["server/*", "utils/*"],
+  "ignore": [".git", "node_modules"]
+}

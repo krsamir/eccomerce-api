@@ -23,6 +23,7 @@ const CONSTANTS = Object.freeze({
     DELETE: "DELETE",
     DELETE_ALL: "DELETE_ALL",
   },
+  ROUTE_LOGS: "ROUTE_LOGS",
 });
 
 const RESPONSE_STATUS = Object.freeze({
@@ -34,24 +35,5 @@ const RESPONSE_STATUS = Object.freeze({
   NOT_FOUND_404: 404,
   INTERNAL_SERVER_ERROR_500: 500,
 });
-const errorHandler = (error) => {
-  switch (error?.name) {
-    case "SequelizeForeignKeyConstraintError":
-      return {
-        code: RESPONSE_STATUS.OK_200,
-        message: CONSTANTS.ERROR_MESSAGE.INVALID_DATA,
-      };
-    case "SequelizeUniqueConstraintError":
-      return {
-        code: RESPONSE_STATUS.OK_200,
-        message: CONSTANTS.ERROR_MESSAGE.DUPLICATE_DATA,
-      };
-    default:
-      console.log(error);
-      return {
-        code: RESPONSE_STATUS.INTERNAL_SERVER_ERROR_500,
-        message: CONSTANTS.ERROR_MESSAGE.SERVER_ERROR,
-      };
-  }
-};
-export { CONSTANTS, RESPONSE_STATUS, errorHandler };
+
+export { CONSTANTS, RESPONSE_STATUS };
