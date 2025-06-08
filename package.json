@@ -6,7 +6,8 @@
   "private": true,
   "workspaces": [
     "utils",
-    "server"
+    "server",
+    "datasource"
   ],
   "scripts": {
     "start": "node server/index.js",
