@@ -10,6 +10,8 @@ const ENVIRONMENT = Object.freeze({
   KNEX_PASSWORD: process.env.KNEX_PASSWORD,
   KNEX_SCHEMA: process.env.KNEX_SCHEMA,
   KNEX_CLIENT: process.env.KNEX_CLIENT,
+  SENDER: process.env.SENDER,
+  MAIL_PASSWORD: process.env.MAIL_PASSWORD,
 });
 
 export default ENVIRONMENT;
