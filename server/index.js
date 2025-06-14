@@ -1,9 +1,11 @@
 import express from "express";
 import _ from "util";
+import { errors } from "celebrate";
 import { coorelation, logger, ENVIRONMENT } from "@ecom/utils";
 import cors from "cors";
 import { CONSTANTS } from "@ecom/utils";
 import httpErrors from "http-errors";
+import appRoutes from "./routes.js";
 
 const app = express();
 
@@ -12,7 +14,7 @@ app.use(coorelation);
 app.use(cors("*"));
 
 app.use((req, res, next) => {
-  const regex = /^\/api\/(user|product)(?:\/.*)?$/;
+  const regex = /^\/api\/(master|product)(?:\/.*)?$/;
   if (regex.test(req.path)) {
     logger.info(CONSTANTS.ROUTE_LOGS);
   }
@@ -20,6 +22,8 @@ app.use((req, res, next) => {
 });
 
 // routes here
+app.use("/api", appRoutes);
+app.use(errors());
 
 app.use((req, res, next) => {
   next(httpErrors(404));

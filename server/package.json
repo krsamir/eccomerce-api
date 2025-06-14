@@ -12,8 +12,10 @@
   "description": "",
   "dependencies": {
     "@ecom/utils": "*",
+    "celebrate": "^15.0.3",
     "cors": "^2.8.5",
     "express": "^5.1.0",
-    "http-errors": "^2.0.0"
+    "http-errors": "^2.0.0",
+    "@ecom/datasource": "*"
   }
 }

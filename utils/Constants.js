@@ -24,6 +24,14 @@ const CONSTANTS = Object.freeze({
     DELETE_ALL: "DELETE_ALL",
   },
   ROUTE_LOGS: "ROUTE_LOGS",
+  TABLES: {
+    ENTITY: "entity",
+    LOCATION: "location",
+    MASTER: "master",
+    MASTER_ENTITY_MAPPER: "master_entity_mapper",
+    ROLE: "role",
+    USER: "user",
+  },
 });
 
 const RESPONSE_STATUS = Object.freeze({
