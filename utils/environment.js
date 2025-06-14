@@ -1,6 +1,11 @@
 import dotenv from "dotenv";
+import path from "path";
+import { fileURLToPath } from "url";
 
-dotenv.config({ path: "../.env" });
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+dotenv.config({ path: path.join(__dirname, "../.env") });
 
 const ENVIRONMENT = Object.freeze({
   NODE_ENV: process.env.NODE_ENV ?? "development",
@@ -12,6 +17,7 @@ const ENVIRONMENT = Object.freeze({
   KNEX_CLIENT: process.env.KNEX_CLIENT,
   SENDER: process.env.SENDER,
   MAIL_PASSWORD: process.env.MAIL_PASSWORD,
+  NODE_HOST_NAME: process.env.NODE_HOST_NAME,
 });
 
 export default ENVIRONMENT;
