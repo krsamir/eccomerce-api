@@ -4,7 +4,6 @@ import { coorelation, logger, ENVIRONMENT } from "@ecom/utils";
 import cors from "cors";
 import { CONSTANTS } from "@ecom/utils";
 import httpErrors from "http-errors";
-import "express-async-errors";
 
 const app = express();
 
@@ -26,7 +25,7 @@ app.use((req, res, next) => {
   next(httpErrors(404));
 });
 
-app.use((err, req, res, next) => {
+app.use((err, req, res) => {
   logger.error(`GLOBAL ERROR HANDLER::\n ${_.inspect(err, { depth: 6 })}`);
 
   const error =
