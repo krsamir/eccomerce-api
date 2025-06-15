@@ -42,10 +42,20 @@ app.use((err, req, res) => {
 
 // app.use(cors({ exposedHeaders: [CONSTANTS.HEADERS.COORELATION_ID] }));
 
-app.listen(ENVIRONMENT.PORT, ENVIRONMENT.NODE_HOST_NAME, () =>
-  logger.info(
-    `SERVER STARTED ON PORT ${
-      ENVIRONMENT.PORT
-    } AT ${new Date().toLocaleString()}\nhttp://${ENVIRONMENT.NODE_HOST_NAME}:${ENVIRONMENT.PORT}`,
-  ),
-);
+if (ENVIRONMENT.NODE_ENV !== CONSTANTS.ENVIRONMENT.DEVELOPMENT) {
+  app.listen(ENVIRONMENT.PORT, () =>
+    logger.info(
+      `SERVER STARTED ON PORT ${
+        ENVIRONMENT.PORT
+      } AT ${new Date().toLocaleString()}`,
+    ),
+  );
+} else {
+  app.listen(ENVIRONMENT.PORT, ENVIRONMENT.NODE_HOST_NAME, () =>
+    logger.info(
+      `SERVER STARTED ON PORT ${
+        ENVIRONMENT.PORT
+      } AT ${new Date().toLocaleString()}\nhttp://${ENVIRONMENT.NODE_HOST_NAME}:${ENVIRONMENT.PORT}`,
+    ),
+  );
+}
