@@ -1,7 +1,7 @@
 import express from "express";
 import _ from "util";
 import { errors } from "celebrate";
-import { coorelation, logger, ENVIRONMENT } from "@ecom/utils";
+import { coorelation, logger, ENVIRONMENT, interceptBody } from "@ecom/utils";
 import cors from "cors";
 import { CONSTANTS } from "@ecom/utils";
 import httpErrors from "http-errors";
@@ -12,6 +12,7 @@ const app = express();
 app.use(express.json());
 app.use(coorelation);
 app.use(cors("*"));
+app.use(interceptBody);
 
 app.use((req, res, next) => {
   const regex = /^\/api\/(master|product)(?:\/.*)?$/;
@@ -29,13 +30,13 @@ app.use((req, res, next) => {
   next(httpErrors(404));
 });
 
-app.use((err, req, res) => {
+app.use((err, req, res, next) => {
   logger.error(`GLOBAL ERROR HANDLER::\n ${_.inspect(err, { depth: 6 })}`);
 
   const error =
     ENVIRONMENT.NODE_ENV === "development"
-      ? { error: err }
-      : { error: "Internal server error." };
+      ? { error: err, status: 0, message: "Internal server error." }
+      : { message: "Internal server error." };
 
   res.status(500).json(error);
 });

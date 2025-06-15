@@ -1,10 +1,10 @@
 import { Joi, Segments } from "celebrate";
 
 class SchemaValidator {
-  getById() {
+  forgotPassword() {
     return {
-      [Segments.PARAMS]: Joi.object({
-        id: Joi.string().uuid().required(),
+      [Segments.BODY]: Joi.object({
+        email: Joi.string().required(),
       }),
     };
   }
