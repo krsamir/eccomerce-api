@@ -30,6 +30,7 @@ app.use((req, res, next) => {
   next(httpErrors(404));
 });
 
+// eslint-disable-next-line no-unused-vars
 app.use((err, req, res, next) => {
   logger.error(`GLOBAL ERROR HANDLER::\n ${_.inspect(err, { depth: 6 })}`);
 
