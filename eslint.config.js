@@ -14,6 +14,7 @@ export default defineConfig([
     rules: {
       "no-unused-vars": "warn",
       "no-undef": "warn",
+      "no-async-promise-executor": "off",
     },
   },
   eslintConfigPrettier,
