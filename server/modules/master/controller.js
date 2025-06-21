@@ -1,4 +1,4 @@
-import { CONSTANTS, logger, RESPONSE_STATUS } from "@ecom/utils";
+import { CONSTANTS, ENVIRONMENT, logger, RESPONSE_STATUS } from "@ecom/utils";
 import { MasterService } from "@ecom/datasource";
 import { inspect } from "util";
 import { handlers } from "@ecom/mail";
@@ -31,11 +31,17 @@ class MasterController {
         payload,
         trx,
       });
-      await handlers.forgotPasswordMailHandler({
-        to: email,
-        subject: "Verify your account",
-        payload: { code: token, timestamp: valid_till },
-      });
+      if (ENVIRONMENT.SEND_EMAILS === "Y") {
+        await handlers.forgotPasswordMailHandler({
+          to: email,
+          subject: "Verify your account",
+          payload: {
+            code: token,
+            timestamp: valid_till,
+            link: `${ENVIRONMENT.CLIENT_URL}/verification?email=${email}&token=${token}`,
+          },
+        });
+      }
       if (data === 1) {
         trx.commit();
         return res.status(RESPONSE_STATUS.OK_200).send({
@@ -54,6 +60,35 @@ class MasterController {
         `MasterController.forgotPassword: Error occurred : ${inspect(error)}`,
       );
       trx.rollback();
+      throw error;
+    }
+  }
+
+  async verification(req, res) {
+    const { email = "", token } = req.body;
+    try {
+      if (!email || !token) {
+        return res.status(RESPONSE_STATUS.BAD_REQUEST_400).send({
+          message: "Invalid Payload.",
+          status: CONSTANTS.STATUS.FAILURE,
+        });
+      }
+      const data = await MasterService.verifyEmailAndToken({ email, token });
+      if (data === 1) {
+        return res.status(RESPONSE_STATUS.OK_200).send({
+          message: "verified Successfully",
+          status: CONSTANTS.STATUS.SUCCESS,
+        });
+      } else {
+        return res.status(RESPONSE_STATUS.OK_200).send({
+          message: "Something went wrong",
+          status: CONSTANTS.STATUS.FAILURE,
+        });
+      }
+    } catch (error) {
+      logger.error(
+        `MasterController.verification: Error occurred : ${inspect(error)}`,
+      );
       throw error;
     }
   }

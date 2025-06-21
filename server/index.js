@@ -36,10 +36,17 @@ app.use((err, req, res, next) => {
 
   const error =
     ENVIRONMENT.NODE_ENV === "development"
-      ? { error: err, status: 0, message: "Internal server error." }
-      : { message: "Internal server error." };
-
-  res.status(500).json(error);
+      ? {
+          error: {
+            name: err.name,
+            message: err.message,
+            stack: err.stack,
+          },
+          status: 0,
+          message: "Internal server error.",
+        }
+      : { message: "Internal server error.", status: 0 };
+  res.status(500).send(error);
 });
 
 // app.use(cors({ exposedHeaders: [CONSTANTS.HEADERS.COORELATION_ID] }));

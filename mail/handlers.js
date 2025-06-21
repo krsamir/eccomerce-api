@@ -23,7 +23,7 @@ const checkValidOptions = ({ to = "", subject = "" }) => {
 handlers.forgotPasswordMailHandler = ({
   to = "",
   subject = "",
-  payload: { code, timestamp },
+  payload: { code, timestamp, link },
 }) =>
   new Promise(async (resolve, reject) => {
     logger.info("handlers.forgrtPasswordMailHandler...");
@@ -45,7 +45,8 @@ handlers.forgotPasswordMailHandler = ({
                   <div style="line-height: 1.5rem;">
                       <div style="font-size: 18px; font-weight: 600;">Greetings!</div><br>
                       <div><span>Your secret code ${code}.</span>This code is valid till ${timestamp?.toLocaleString()}.</div>
-                      <div>Please verify before code expires.</div>
+                      <a href=${link}>${link}</a><br>
+                      <div>Please verify before link/code expires.</div>
                       <div>Happy to see you!</div><br>
                       <div>Kind Regards</div>
                       <div>Product Team.</div>

@@ -8,6 +8,14 @@ class SchemaValidator {
       }),
     };
   }
+  verification() {
+    return {
+      [Segments.BODY]: Joi.object({
+        email: Joi.string().required(),
+        token: Joi.string().required(),
+      }),
+    };
+  }
 }
 
 export default new SchemaValidator();

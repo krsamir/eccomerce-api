@@ -9,4 +9,9 @@ export default express
     "/forgot-password",
     celebrate(validator.forgotPassword()),
     Controller.forgotPassword.bind(Controller),
+  )
+  .post(
+    "/verification",
+    celebrate(validator.verification()),
+    Controller.verification.bind(Controller),
   );

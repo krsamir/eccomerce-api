@@ -19,6 +19,7 @@ const ENVIRONMENT = Object.freeze({
   MAIL_PASSWORD: process.env.MAIL_PASSWORD,
   NODE_HOST_NAME: process.env.NODE_HOST_NAME,
   CLIENT_URL: process.env.CLIENT_URL,
+  SEND_EMAILS: process.env.SEND_EMAILS,
 });
 
 export default ENVIRONMENT;
