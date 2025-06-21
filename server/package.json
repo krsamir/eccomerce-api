@@ -16,6 +16,7 @@
     "cors": "^2.8.5",
     "express": "^5.1.0",
     "http-errors": "^2.0.0",
-    "@ecom/datasource": "*"
+    "@ecom/datasource": "*",
+    "@ecom/mail": "*"
   }
 }
