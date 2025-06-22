@@ -25,9 +25,12 @@ class MasterService {
       return knex(`${ENVIRONMENT.KNEX_SCHEMA}.${CONSTANTS.TABLES.MASTER}`)
         .update({
           is_active: true,
-          valid_till: new Date(now.getTime() + 10 * 60 * 1000),
-          token: "PCW",
-          invalid_logins: 10,
+          valid_till: new Date(
+            now.getTime() +
+              CONSTANTS.AUTHENTICATION.TOKEN_VALIDITY_IN_MINS * 60 * 1000,
+          ),
+          token: CONSTANTS.AUTHENTICATION.PASSWORD_CHANGE_TOKEN,
+          invalid_logins: CONSTANTS.AUTHENTICATION.NO_OF_INVALID_LOGINS_COUNT,
         })
         .where({
           email,
@@ -45,24 +48,47 @@ class MasterService {
 
   async setPasswordWithoutLogin({ email = "", password = "" }) {
     try {
-      logger.info(`MasterService.setPassword called :`);
+      logger.info(`MasterService.setPasswordWithoutLogin called :`);
       return knex(`${ENVIRONMENT.KNEX_SCHEMA}.${CONSTANTS.TABLES.MASTER}`)
         .update({
           is_active: true,
           valid_till: null,
           token: null,
-          invalid_logins: 10,
+          invalid_logins: CONSTANTS.AUTHENTICATION.NO_OF_INVALID_LOGINS_COUNT,
           password,
         })
         .where({
           email,
-          token: "PCW",
+          token: CONSTANTS.AUTHENTICATION.PASSWORD_CHANGE_TOKEN,
           is_deleted: false,
         })
         .andWhereRaw("NOW() <= valid_till");
     } catch (error) {
       logger.error(
-        `MasterService.setPassword: Error occurred :${inspect(error)}`,
+        `MasterService.setPasswordWithoutLogin: Error occurred :${inspect(error)}`,
+      );
+      throw error;
+    }
+  }
+
+  async setPasswordWithLogin({ email = "", password = "" }) {
+    try {
+      logger.info(`MasterService.setPasswordWithLogin called :`);
+      return knex(`${ENVIRONMENT.KNEX_SCHEMA}.${CONSTANTS.TABLES.MASTER}`)
+        .update({
+          invalid_logins: CONSTANTS.AUTHENTICATION.PASSWORD_CHANGE_TOKEN,
+          is_active: true,
+          valid_till: null,
+          token: null,
+          password,
+        })
+        .where({
+          email,
+          is_deleted: false,
+        });
+    } catch (error) {
+      logger.error(
+        `MasterService.setPasswordWithLogin: Error occurred :${inspect(error)}`,
       );
       throw error;
     }

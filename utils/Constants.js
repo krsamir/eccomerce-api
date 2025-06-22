@@ -32,6 +32,12 @@ const CONSTANTS = Object.freeze({
     ROLE: "role",
     USER: "user",
   },
+  AUTHENTICATION: {
+    TOKEN_VALIDITY_IN_MINS: 10,
+    BCRYPT_SALT: 10,
+    NO_OF_INVALID_LOGINS_COUNT: 10,
+    PASSWORD_CHANGE_TOKEN: "PCW",
+  },
 });
 
 const RESPONSE_STATUS = Object.freeze({

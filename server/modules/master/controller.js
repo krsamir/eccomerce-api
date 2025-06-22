@@ -1,4 +1,10 @@
-import { CONSTANTS, ENVIRONMENT, logger, RESPONSE_STATUS } from "@ecom/utils";
+import {
+  checkIsAuthenticated,
+  CONSTANTS,
+  ENVIRONMENT,
+  logger,
+  RESPONSE_STATUS,
+} from "@ecom/utils";
 import { MasterService } from "@ecom/datasource";
 import { inspect } from "util";
 import { handlers } from "@ecom/mail";
@@ -20,7 +26,10 @@ class MasterController {
       }
 
       const now = new Date();
-      const valid_till = new Date(now.getTime() + 10 * 60 * 1000);
+      const valid_till = new Date(
+        now.getTime() +
+          CONSTANTS.AUTHENTICATION.TOKEN_VALIDITY_IN_MINS * 60 * 1000,
+      );
       const token = crypto?.randomUUID()?.slice(0, 6);
       const payload = {
         valid_till,
@@ -104,25 +113,43 @@ class MasterController {
     const { email, password } = req.body;
     try {
       logger.info(`MasterController.setPassword called :`);
-      var salt = genSaltSync(10);
+      var salt = genSaltSync(CONSTANTS.AUTHENTICATION.BCRYPT_SALT);
       var hashedPassword = hashSync(password, salt);
-
-      const data = await MasterService.setPasswordWithoutLogin({
-        email,
-        password: hashedPassword,
-      });
-
-      if (data === 1) {
-        return res.status(RESPONSE_STATUS.OK_200).send({
-          message: "Password set Successfully.",
-          status: CONSTANTS.STATUS.SUCCESS,
+      if (checkIsAuthenticated(req)) {
+        const data = await MasterService.setPasswordWithLogin({
+          email,
+          password: hashedPassword,
         });
+
+        if (data === 1) {
+          return res.status(RESPONSE_STATUS.OK_200).send({
+            message: "Password set Successfully.",
+            status: CONSTANTS.STATUS.SUCCESS,
+          });
+        } else {
+          return res.status(RESPONSE_STATUS.OK_200).send({
+            message: "something went wrong. Try again.",
+            status: CONSTANTS.STATUS.FAILURE,
+          });
+        }
       } else {
-        return res.status(RESPONSE_STATUS.OK_200).send({
-          message:
-            "Token expired/password was not set withing stipulated time/something went wrong. Try again.",
-          status: CONSTANTS.STATUS.FAILURE,
+        const data = await MasterService.setPasswordWithoutLogin({
+          email,
+          password: hashedPassword,
         });
+
+        if (data === 1) {
+          return res.status(RESPONSE_STATUS.OK_200).send({
+            message: "Password set Successfully.",
+            status: CONSTANTS.STATUS.SUCCESS,
+          });
+        } else {
+          return res.status(RESPONSE_STATUS.OK_200).send({
+            message:
+              "Token expired/password was not set withing stipulated time/something went wrong. Try again.",
+            status: CONSTANTS.STATUS.FAILURE,
+          });
+        }
       }
     } catch (error) {
       logger.error(
@@ -152,7 +179,11 @@ class MasterController {
         );
         if (ismatched) {
           await MasterService.setLoginDetails({
-            payload: { last_login: knex.raw(`NOW()`), invalid_logins: 10 },
+            payload: {
+              last_login: knex.raw(`NOW()`),
+              invalid_logins:
+                CONSTANTS.AUTHENTICATION.NO_OF_INVALID_LOGINS_COUNT,
+            },
             condition: { id: data?.id },
           });
           const jwtToken = jwt.sign(
@@ -161,6 +192,7 @@ class MasterController {
               email: data.email,
               user_name: data.user_name,
               role_id: data?.role_id,
+              role: [data?.role_name],
             },
             ENVIRONMENT.JWT_SECRET,
             {
