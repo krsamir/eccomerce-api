@@ -38,7 +38,7 @@
             "header": [],
             "body": {
               "mode": "raw",
-              "raw": "{\n    \"email\": \"samirkumar2527@gmail.com\",\n    \"token\": \"841f0b\"\n}",
+              "raw": "{\n    \"email\": \"samirkumar2527@gmail.com\",\n    \"token\": \"627166\"\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -112,6 +112,34 @@
           "response": []
         }
       ]
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{token}}",
+        "type": "string"
+      }
+    ]
+  },
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "packages": {},
+        "exec": [""]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "packages": {},
+        "exec": [""]
+      }
     }
   ]
 }
