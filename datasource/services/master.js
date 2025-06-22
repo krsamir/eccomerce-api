@@ -71,22 +71,26 @@ class MasterService {
   async getUserByEmail({ email = "", user_name = "" }) {
     try {
       logger.info(`MasterService.getUserByEmail called :`);
-      return knex(`${ENVIRONMENT.KNEX_SCHEMA}.${CONSTANTS.TABLES.MASTER}`)
+      return knex(
+        `${ENVIRONMENT.KNEX_SCHEMA}.${CONSTANTS.TABLES.MASTER} as master`,
+      )
         .select([
-          "id",
+          "master.id as id",
           "email",
           "password",
           "user_name",
           "invalid_logins",
           "role_id",
+          "role.name as role_name",
         ])
         .where({
           is_active: true,
-          is_deleted: false,
+          "master.is_deleted": false,
         })
         .andWhere({ user_name })
         .orWhere({ email })
-        .first();
+        .first()
+        .join("role as role", "role.id", "master.role_id");
     } catch (error) {
       logger.error(
         `MasterService.getUserByEmail: Error occurred :${inspect(error)}`,
