@@ -14,4 +14,14 @@ export default express
     "/verification",
     celebrate(validator.verification()),
     Controller.verification.bind(Controller),
+  )
+  .post(
+    "/set-password",
+    celebrate(validator.setPassword()),
+    Controller.setPassword.bind(Controller),
+  )
+  .post(
+    "/login",
+    celebrate(validator.authenticate()),
+    Controller.authenticate.bind(Controller),
   );

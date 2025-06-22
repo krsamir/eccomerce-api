@@ -16,6 +16,23 @@ class SchemaValidator {
       }),
     };
   }
+  setPassword() {
+    return {
+      [Segments.BODY]: Joi.object({
+        email: Joi.string().required(),
+        password: Joi.string().required(),
+      }),
+    };
+  }
+  authenticate() {
+    return {
+      [Segments.BODY]: Joi.object({
+        email: Joi.string().optional().allow(null).allow(""),
+        userName: Joi.string().optional().allow(null).allow(""),
+        password: Joi.string().required(),
+      }),
+    };
+  }
 }
 
 export default new SchemaValidator();

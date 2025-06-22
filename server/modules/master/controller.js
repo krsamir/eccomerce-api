@@ -3,6 +3,8 @@ import { MasterService } from "@ecom/datasource";
 import { inspect } from "util";
 import { handlers } from "@ecom/mail";
 import knex from "@ecom/datasource";
+import { genSaltSync, hashSync, compareSync } from "bcryptjs";
+import jwt from "jsonwebtoken";
 
 class MasterController {
   async forgotPassword(req, res) {
@@ -25,6 +27,7 @@ class MasterController {
         token,
         is_active: false,
         password: null,
+        is_deleted: false,
       };
       const data = await MasterService.setTokenForEmailAndValidity({
         email,
@@ -45,7 +48,8 @@ class MasterController {
       if (data === 1) {
         trx.commit();
         return res.status(RESPONSE_STATUS.OK_200).send({
-          message: "Token sent to your email. Please verify before it expires",
+          message:
+            "OTP has been sent to your email. Please verify before it expires",
           status: CONSTANTS.STATUS.SUCCESS,
         });
       } else {
@@ -81,13 +85,114 @@ class MasterController {
         });
       } else {
         return res.status(RESPONSE_STATUS.OK_200).send({
-          message: "Something went wrong",
+          message: "Token expired/Something went wrong",
           status: CONSTANTS.STATUS.FAILURE,
         });
       }
     } catch (error) {
       logger.error(
         `MasterController.verification: Error occurred : ${inspect(error)}`,
+      );
+      throw error;
+    }
+  }
+  /**
+   * Check is already logged In email & password is sufficient for reset password.
+   * If unauthenticated user changing password check for token & valid till fields
+   */
+  async setPassword(req, res) {
+    const { email, password } = req.body;
+    try {
+      logger.info(`MasterController.setPassword called :`);
+      var salt = genSaltSync(10);
+      var hashedPassword = hashSync(password, salt);
+
+      const data = await MasterService.setPasswordWithoutLogin({
+        email,
+        password: hashedPassword,
+      });
+
+      if (data === 1) {
+        return res.status(RESPONSE_STATUS.OK_200).send({
+          message: "Password set Successfully.",
+          status: CONSTANTS.STATUS.SUCCESS,
+        });
+      } else {
+        return res.status(RESPONSE_STATUS.OK_200).send({
+          message:
+            "Token expired/password was not set withing stipulated time/something went wrong. Try again.",
+          status: CONSTANTS.STATUS.FAILURE,
+        });
+      }
+    } catch (error) {
+      logger.error(
+        `MasterController.setPassword: Error occurred : ${inspect(error)}`,
+      );
+      throw error;
+    }
+  }
+
+  async authenticate(req, res) {
+    const { email, password, userName: user_name } = req.body;
+    try {
+      logger.info(`MasterController.authenticate called :`);
+      const data = await MasterService.getUserByEmail({ email, user_name });
+      if (data) {
+        if (data?.invalid_logins <= 0) {
+          return res.status(RESPONSE_STATUS.OK_200).send({
+            message:
+              "Maximum password attempt exceeded. Please reverify yourself.",
+            status: CONSTANTS.STATUS.FAILURE,
+          });
+        }
+        const hashedPassword = data.password;
+        const ismatched = compareSync(
+          password,
+          hashedPassword ? hashedPassword : "",
+        );
+        if (ismatched) {
+          await MasterService.setLoginDetails({
+            payload: { last_login: knex.raw(`NOW()`), invalid_logins: 10 },
+            condition: { id: data?.id },
+          });
+          const jwtToken = jwt.sign(
+            {
+              id: data.id,
+              email: data.email,
+              user_name: data.user_name,
+              role_id: data?.role_id,
+            },
+            ENVIRONMENT.JWT_SECRET,
+            {
+              expiresIn: ENVIRONMENT.JWT_EXPIRATION_TIME,
+            },
+          );
+
+          return res.status(RESPONSE_STATUS.OK_200).send({
+            message: "Logged in.",
+            status: CONSTANTS.STATUS.SUCCESS,
+            token: jwtToken,
+          });
+        }
+        await MasterService.setLoginDetails({
+          payload: {
+            invalid_logins: knex.raw("?? - 1", ["invalid_logins"]),
+          },
+          condition: { id: data?.id },
+        });
+        return res.status(RESPONSE_STATUS.OK_200).send({
+          message: "Wrong Credentials",
+          status: CONSTANTS.STATUS.FAILURE,
+        });
+      } else {
+        return res.status(RESPONSE_STATUS.OK_200).send({
+          message: "Wrong Credentials",
+          status: CONSTANTS.STATUS.FAILURE,
+        });
+      }
+    } catch (error) {
+      logger.error(
+        `MasterController.authenticate: Error occurred : ${inspect(error)}`,
       );
       throw error;
     }

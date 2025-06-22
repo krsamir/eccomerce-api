@@ -11,12 +11,14 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
+    "@ecom/datasource": "*",
+    "@ecom/mail": "*",
     "@ecom/utils": "*",
+    "bcryptjs": "^3.0.2",
     "celebrate": "^15.0.3",
     "cors": "^2.8.5",
     "express": "^5.1.0",
     "http-errors": "^2.0.0",
-    "@ecom/datasource": "*",
-    "@ecom/mail": "*"
+    "jsonwebtoken": "^9.0.2"
   }
 }

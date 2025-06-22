@@ -32,11 +32,80 @@ class MasterService {
         .where({
           email,
           token,
+          is_deleted: false,
         })
         .andWhereRaw("NOW() <= valid_till");
     } catch (error) {
       logger.error(
         `MasterService.verifyEmailAndToken: Error occurred :${inspect(error)}`,
+      );
+      throw error;
+    }
+  }
+
+  async setPasswordWithoutLogin({ email = "", password = "" }) {
+    try {
+      logger.info(`MasterService.setPassword called :`);
+      return knex(`${ENVIRONMENT.KNEX_SCHEMA}.${CONSTANTS.TABLES.MASTER}`)
+        .update({
+          is_active: true,
+          valid_till: null,
+          token: null,
+          invalid_logins: 10,
+          password,
+        })
+        .where({
+          email,
+          token: "PCW",
+          is_deleted: false,
+        })
+        .andWhereRaw("NOW() <= valid_till");
+    } catch (error) {
+      logger.error(
+        `MasterService.setPassword: Error occurred :${inspect(error)}`,
+      );
+      throw error;
+    }
+  }
+
+  async getUserByEmail({ email = "", user_name = "" }) {
+    try {
+      logger.info(`MasterService.getUserByEmail called :`);
+      return knex(`${ENVIRONMENT.KNEX_SCHEMA}.${CONSTANTS.TABLES.MASTER}`)
+        .select([
+          "id",
+          "email",
+          "password",
+          "user_name",
+          "invalid_logins",
+          "role_id",
+        ])
+        .where({
+          is_active: true,
+          is_deleted: false,
+        })
+        .andWhere({ user_name })
+        .orWhere({ email })
+        .first();
+    } catch (error) {
+      logger.error(
+        `MasterService.getUserByEmail: Error occurred :${inspect(error)}`,
+      );
+      throw error;
+    }
+  }
+
+  async setLoginDetails({ payload, condition }) {
+    try {
+      logger.info(`MasterService.setLoginDetails called :`);
+      return knex(`${ENVIRONMENT.KNEX_SCHEMA}.${CONSTANTS.TABLES.MASTER}`)
+        .update({
+          ...payload,
+        })
+        .where({ ...condition });
+    } catch (error) {
+      logger.error(
+        `MasterService.setLoginDetails: Error occurred :${inspect(error)}`,
       );
       throw error;
     }
