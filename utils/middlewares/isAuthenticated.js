@@ -6,7 +6,7 @@ import logger from "../logger.js";
 export const checkIsAuthenticated = (req) => {
   try {
     let token = req.header("Authorization");
-    token = token.replace("Bearer ", "");
+    token = token?.replace("Bearer ", "");
     const decoded = jwt.verify(token, ENVIRONMENT.JWT_SECRET);
     req.id = decoded?.id;
     req.email = decoded?.email;
