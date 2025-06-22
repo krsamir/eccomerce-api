@@ -76,7 +76,7 @@ class MasterService {
       logger.info(`MasterService.setPasswordWithLogin called :`);
       return knex(`${ENVIRONMENT.KNEX_SCHEMA}.${CONSTANTS.TABLES.MASTER}`)
         .update({
-          invalid_logins: CONSTANTS.AUTHENTICATION.PASSWORD_CHANGE_TOKEN,
+          invalid_logins: CONSTANTS.AUTHENTICATION.NO_OF_INVALID_LOGINS_COUNT,
           is_active: true,
           valid_till: null,
           token: null,

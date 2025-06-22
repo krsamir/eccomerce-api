@@ -204,7 +204,7 @@ class MasterController {
             message: "Logged in.",
             status: CONSTANTS.STATUS.SUCCESS,
             token: jwtToken,
-            role: [data?.role_name],
+            role: [data?.role_id],
           });
         }
         await MasterService.setLoginDetails({
