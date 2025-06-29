@@ -1,7 +1,13 @@
 import express from "express";
 import _ from "util";
 import { errors } from "celebrate";
-import { coorelation, logger, ENVIRONMENT, interceptBody } from "@ecom/utils";
+import {
+  coorelation,
+  logger,
+  ENVIRONMENT,
+  interceptBody,
+  RESPONSE_STATUS,
+} from "@ecom/utils";
 import cors from "cors";
 import { CONSTANTS } from "@ecom/utils";
 import httpErrors from "http-errors";
@@ -15,7 +21,7 @@ app.use(cors("*"));
 app.use(interceptBody);
 
 app.use((req, res, next) => {
-  const regex = /^\/api\/(master|product)(?:\/.*)?$/;
+  const regex = /^\/api\/(master|product|location)(?:\/.*)?$/;
   if (regex.test(req.path)) {
     logger.info(CONSTANTS.ROUTE_LOGS);
   }
@@ -32,6 +38,12 @@ app.use((req, res, next) => {
 
 // eslint-disable-next-line no-unused-vars
 app.use((err, req, res, next) => {
+  if (err.code === "ER_DUP_ENTRY") {
+    return res.status(RESPONSE_STATUS.OK_200).send({
+      message: "This record already exists.",
+      status: CONSTANTS.STATUS.FAILURE,
+    });
+  }
   logger.error(`GLOBAL ERROR HANDLER::\n ${_.inspect(err, { depth: 6 })}`);
 
   const error =
@@ -42,11 +54,11 @@ app.use((err, req, res, next) => {
             message: err.message,
             stack: err.stack,
           },
-          status: 0,
+          status: CONSTANTS.STATUS.FAILURE,
           message: "Internal server error.",
         }
-      : { message: "Internal server error.", status: 0 };
-  res.status(500).send(error);
+      : { message: "Internal server error.", status: CONSTANTS.STATUS.FAILURE };
+  res.status(RESPONSE_STATUS.INTERNAL_SERVER_ERROR_500).send(error);
 });
 
 // app.use(cors({ exposedHeaders: [CONSTANTS.HEADERS.COORELATION_ID] }));
