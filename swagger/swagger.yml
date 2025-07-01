@@ -61,6 +61,7 @@ paths:
               type: object
               example:
                 userName: samir
+                email: samir
                 password: admin
       responses:
         "200":

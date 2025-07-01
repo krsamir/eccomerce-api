@@ -28,7 +28,10 @@ const file = fs.readFileSync(
 const swaggerDocument = YAML.parse(file);
 
 const app = express();
-app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+
+if (ENVIRONMENT.NODE_ENV === "development") {
+  app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+}
 
 app.use(express.json());
 app.use(coorelation);
