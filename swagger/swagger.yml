@@ -1,0 +1,87 @@
+openapi: 3.0.0
+info:
+  title: ECOM
+  version: 1.0.0
+servers:
+  - url: http://localhost:5050
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+security:
+  - bearerAuth: []
+tags:
+  - name: MASTER
+paths:
+  /api/master/forgot-password:
+    post:
+      tags:
+        - MASTER
+      summary: FORGOT PASSWORD
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                email: samirkumar2527@gmail.com
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json: {}
+  /api/master/verification:
+    post:
+      tags:
+        - MASTER
+      summary: VERIFICATION
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                email: samirkumar2527@gmail.com
+                token: "627166"
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json: {}
+  /api/master/login:
+    post:
+      tags:
+        - MASTER
+      summary: LOGIN
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                userName: samir
+                password: admin
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json: {}
+  /api/master/set-password:
+    post:
+      tags:
+        - MASTER
+      summary: SET PASSWORD
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                email: samirkumar2527@gmail.com
+                password: admin
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json: {}

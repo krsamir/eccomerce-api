@@ -19,6 +19,8 @@
     "cors": "^2.8.5",
     "express": "^5.1.0",
     "http-errors": "^2.0.0",
-    "jsonwebtoken": "^9.0.2"
+    "jsonwebtoken": "^9.0.2",
+    "swagger-ui-express": "^5.0.1",
+    "yaml": "^2.8.0"
   }
 }
