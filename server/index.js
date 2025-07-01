@@ -1,4 +1,9 @@
 import express from "express";
+import swaggerUi from "swagger-ui-express";
+import fs from "fs";
+import YAML from "yaml";
+import path from "path";
+import { fileURLToPath } from "url";
 import _ from "util";
 import { errors } from "celebrate";
 import {
@@ -13,7 +18,17 @@ import { CONSTANTS } from "@ecom/utils";
 import httpErrors from "http-errors";
 import appRoutes from "./routes.js";
 
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+const file = fs.readFileSync(
+  path.join(__dirname, "../swagger/swagger.yml"),
+  "utf8",
+);
+const swaggerDocument = YAML.parse(file);
+
 const app = express();
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 app.use(express.json());
 app.use(coorelation);
