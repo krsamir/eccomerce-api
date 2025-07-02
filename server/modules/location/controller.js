@@ -1,10 +1,4 @@
-import {
-  checkIsAuthenticated,
-  CONSTANTS,
-  ENVIRONMENT,
-  logger,
-  RESPONSE_STATUS,
-} from "@ecom/utils";
+import { CONSTANTS, logger, RESPONSE_STATUS } from "@ecom/utils";
 import { LocationService } from "@ecom/datasource";
 import { inspect } from "util";
 
