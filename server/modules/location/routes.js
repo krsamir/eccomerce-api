@@ -10,4 +10,14 @@ export default express
     "/",
     celebrate(validator.createLocation()),
     Controller.createLocation.bind(Controller),
+  )
+  .patch(
+    "/",
+    celebrate(validator.updateLocation()),
+    Controller.updateLocation.bind(Controller),
+  )
+  .delete(
+    "/",
+    celebrate(validator.deleteLocation()),
+    Controller.deleteLocation.bind(Controller),
   );

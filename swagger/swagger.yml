@@ -13,6 +13,7 @@ security:
   - bearerAuth: []
 tags:
   - name: MASTER
+  - name: LOCATION
 paths:
   /api/master/forgot-password:
     post:
@@ -60,8 +61,7 @@ paths:
             schema:
               type: object
               example:
-                userName: samir
-                email: samir
+                userName: admin
                 password: admin
       responses:
         "200":
@@ -81,6 +81,71 @@ paths:
               example:
                 email: samirkumar2527@gmail.com
                 password: admin
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json: {}
+  /api/location:
+    get:
+      tags:
+        - LOCATION
+      summary: GET LOCATION
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json: {}
+    delete:
+      tags:
+        - LOCATION
+      summary: DELETE LOCATION
+      parameters:
+        - name: id
+          in: query
+          schema:
+            type: string
+          example: d0bc643a-7512-47b0-a4b2-4a609df2e223
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json: {}
+    post:
+      tags:
+        - LOCATION
+      summary: CREATE LOCATION
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                name: T1
+                city: Buxar
+                state: Bihar
+                country: Bharat
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json: {}
+    patch:
+      tags:
+        - LOCATION
+      summary: UPDATE LOCATION
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                id: d0bc643a-7512-47b0-a4b2-4a609df2e223
+                name: Dumri5
+                city: Buxar
+                state: Bihar
+                country: Bharat
+                delete: false
       responses:
         "200":
           description: Successful response
