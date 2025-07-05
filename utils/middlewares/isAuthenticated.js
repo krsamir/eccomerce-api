@@ -1,11 +1,11 @@
 import jwt from "jsonwebtoken";
 import ENVIRONMENT from "../environment.js";
-import { RESPONSE_STATUS } from "../Constants.js";
+import { CONSTANTS, RESPONSE_STATUS } from "../Constants.js";
 import logger from "../logger.js";
 
-export const checkIsAuthenticated = (req) => {
+export const checkIsAuthenticatedHandler = (req) => {
   try {
-    let token = req.header("Authorization");
+    let token = req.header(CONSTANTS.AUTHORIZATION);
     token = token?.replace("Bearer ", "");
     const decoded = jwt.verify(token, ENVIRONMENT.JWT_SECRET);
     req.id = decoded?.id;
@@ -20,8 +20,8 @@ export const checkIsAuthenticated = (req) => {
   }
 };
 
-export const isAutehnticated = (req, res, next) => {
-  if (checkIsAuthenticated(req)) {
+export const isAuthenticated = (req, res, next) => {
+  if (checkIsAuthenticatedHandler(req)) {
     next();
   } else {
     logger.error({ error: "Authentication Required. Please login again." });

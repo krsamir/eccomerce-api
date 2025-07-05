@@ -1,5 +1,5 @@
 import {
-  checkIsAuthenticated,
+  checkIsAuthenticatedHandler,
   CONSTANTS,
   ENVIRONMENT,
   logger,
@@ -115,7 +115,7 @@ class MasterController {
       logger.info(`MasterController.setPassword called :`);
       var salt = genSaltSync(CONSTANTS.AUTHENTICATION.BCRYPT_SALT);
       var hashedPassword = hashSync(password, salt);
-      if (checkIsAuthenticated(req)) {
+      if (checkIsAuthenticatedHandler(req)) {
         const data = await MasterService.setPasswordWithLogin({
           email,
           password: hashedPassword,
@@ -192,7 +192,7 @@ class MasterController {
               email: data.email,
               user_name: data.user_name,
               role_id: data?.role_id,
-              role: [data?.role_name],
+              role: data?.role_name,
             },
             ENVIRONMENT.JWT_SECRET,
             {
@@ -204,7 +204,7 @@ class MasterController {
             message: "Logged in.",
             status: CONSTANTS.STATUS.SUCCESS,
             token: jwtToken,
-            role: [data?.role_id],
+            role: data?.role_id,
           });
         }
         await MasterService.setLoginDetails({

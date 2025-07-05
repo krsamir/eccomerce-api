@@ -4,9 +4,10 @@ import ENVIRONMENT from "./environment.js";
 import { CONSTANTS, RESPONSE_STATUS } from "./Constants.js";
 import interceptBody from "./interceptBody.js";
 import {
-  checkIsAuthenticated,
-  isAutehnticated,
+  checkIsAuthenticatedHandler,
+  isAuthenticated,
 } from "./middlewares/isAuthenticated.js";
+import { CAPABILITY, capabilityHandler } from "./middlewares/isAuthorized.js";
 
 export {
   coorelation,
@@ -15,6 +16,8 @@ export {
   CONSTANTS,
   RESPONSE_STATUS,
   interceptBody,
-  checkIsAuthenticated,
-  isAutehnticated,
+  checkIsAuthenticatedHandler,
+  capabilityHandler,
+  isAuthenticated,
+  CAPABILITY,
 };
