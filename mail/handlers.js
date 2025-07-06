@@ -1,6 +1,10 @@
 import { ENVIRONMENT, logger } from "@ecom/utils";
 import transporter from "./transporter.js";
 import { inspect } from "util";
+import { fileURLToPath } from "url";
+
+const __filename = fileURLToPath(import.meta.url);
+
 const handlers = {};
 
 const checkValidOptions = ({ to = "", subject = "" }) => {
@@ -26,7 +30,7 @@ handlers.forgotPasswordMailHandler = ({
   payload: { code, timestamp, link },
 }) =>
   new Promise(async (resolve, reject) => {
-    logger.info("handlers.forgrtPasswordMailHandler...");
+    logger(__filename).info("handlers.forgrtPasswordMailHandler...");
     try {
       checkValidOptions({ to, subject });
       const info = await transporter.sendMail({
@@ -55,10 +59,10 @@ handlers.forgotPasswordMailHandler = ({
           </html>
           `,
       });
-      logger.info(`Email sent! ${inspect(info)}`);
+      logger(__filename).info(`Email sent! ${inspect(info)}`);
       resolve(info);
     } catch (error) {
-      logger.error(`Email Failed ${inspect(error)}`);
+      logger(__filename).error(`Email Failed ${inspect(error)}`);
       reject(error);
     }
   });

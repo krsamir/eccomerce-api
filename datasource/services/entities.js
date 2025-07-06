@@ -2,6 +2,9 @@ import { ENVIRONMENT, logger, CONSTANTS, TRANSFORMERS } from "@ecom/utils";
 import knex from "../knexClient.js";
 import { inspect } from "util";
 import { ROLES_NAME } from "@ecom/utils/Constants.js";
+import { fileURLToPath } from "url";
+
+const __filename = fileURLToPath(import.meta.url);
 
 const GET_ALL_ENTITY_RETURNING = [
   "entity.*",
@@ -74,7 +77,7 @@ class EntitiesService {
     created_by,
   }) {
     try {
-      logger.info(`EntitiesService.createEntity called :`);
+      logger(__filename).info(`EntitiesService.createEntity called :`);
       await knex(
         `${ENVIRONMENT.KNEX_SCHEMA}.${CONSTANTS.TABLES.ENTITY}`,
       ).insert({
@@ -91,7 +94,7 @@ class EntitiesService {
       const result = await this.getEntityById({ id });
       return TRANSFORMERS.entityLocationTransformers(result);
     } catch (error) {
-      logger.error(
+      logger(__filename).error(
         `EntitiesService.createEntity: Error occurred :${inspect(error)}`,
       );
       throw error;
@@ -104,7 +107,7 @@ class EntitiesService {
       returning = GET_ALL_ENTITY_RETURNING;
     }
     try {
-      logger.info(`EntitiesService.getAllEntitiesList called :`);
+      logger(__filename).info(`EntitiesService.getAllEntitiesList called :`);
       let baseQuery = knex(
         `${ENVIRONMENT.KNEX_SCHEMA}.${CONSTANTS.TABLES.ENTITY}`,
       )
@@ -130,7 +133,7 @@ class EntitiesService {
         TRANSFORMERS.entityLocationTransformers(item),
       );
     } catch (error) {
-      logger.error(
+      logger(__filename).error(
         `EntitiesService.getAllEntitiesList: Error occurred :${inspect(error)}`,
       );
       throw error;
@@ -139,7 +142,7 @@ class EntitiesService {
 
   async updateEntity(entity, id) {
     try {
-      logger.info(`EntitiesService.updateEntity called :`);
+      logger(__filename).info(`EntitiesService.updateEntity called :`);
       const data = await knex(
         `${ENVIRONMENT.KNEX_SCHEMA}.${CONSTANTS.TABLES.ENTITY}`,
       )
@@ -155,7 +158,7 @@ class EntitiesService {
         return data;
       }
     } catch (error) {
-      logger.error(
+      logger(__filename).error(
         `EntitiesService.updateEntity: Error occurred :${inspect(error)}`,
       );
       throw error;
@@ -164,7 +167,7 @@ class EntitiesService {
 
   async deleteEntity({ id, is_deleted }) {
     try {
-      logger.info(`EntitiesService.deleteEntity called :`);
+      logger(__filename).info(`EntitiesService.deleteEntity called :`);
       const data = await knex(
         `${ENVIRONMENT.KNEX_SCHEMA}.${CONSTANTS.TABLES.ENTITY}`,
       )
@@ -180,7 +183,7 @@ class EntitiesService {
         return data;
       }
     } catch (error) {
-      logger.error(
+      logger(__filename).error(
         `EntitiesService.deleteEntity: Error occurred :${inspect(error)}`,
       );
       throw error;

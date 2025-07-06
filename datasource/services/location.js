@@ -2,6 +2,9 @@ import { ENVIRONMENT, logger, CONSTANTS } from "@ecom/utils";
 import knex from "../knexClient.js";
 import { inspect } from "util";
 import { ROLES_NAME } from "@ecom/utils/Constants.js";
+import { fileURLToPath } from "url";
+
+const __filename = fileURLToPath(import.meta.url);
 
 class LocationService {
   async getAllLocations({ role }) {
@@ -21,7 +24,7 @@ class LocationService {
     }
 
     try {
-      logger.info(`LocationService.getAllLocations called :`);
+      logger(__filename).info(`LocationService.getAllLocations called :`);
       const query = knex(
         `${ENVIRONMENT.KNEX_SCHEMA}.${CONSTANTS.TABLES.LOCATION}`,
       ).select(returning);
@@ -30,7 +33,7 @@ class LocationService {
 
       return await query;
     } catch (error) {
-      logger.error(
+      logger(__filename).error(
         `LocationService.getAllLocations: Error occurred :${inspect(error)}`,
       );
       throw error;
@@ -39,7 +42,7 @@ class LocationService {
 
   async createLocation({ name, city, state, country, id }) {
     try {
-      logger.info(`LocationService.createLocation called :`);
+      logger(__filename).info(`LocationService.createLocation called :`);
       await knex(
         `${ENVIRONMENT.KNEX_SCHEMA}.${CONSTANTS.TABLES.LOCATION}`,
       ).insert({
@@ -54,7 +57,7 @@ class LocationService {
         .where({ id })
         .first();
     } catch (error) {
-      logger.error(
+      logger(__filename).error(
         `LocationService.createLocation: Error occurred :${inspect(error)}`,
       );
       throw error;
@@ -63,7 +66,7 @@ class LocationService {
 
   async updateLocation({ name, city, state, country, id, is_deleted }) {
     try {
-      logger.info(`LocationService.updateLocation called :`);
+      logger(__filename).info(`LocationService.updateLocation called :`);
       const data = await knex(
         `${ENVIRONMENT.KNEX_SCHEMA}.${CONSTANTS.TABLES.LOCATION}`,
       )
@@ -85,7 +88,7 @@ class LocationService {
         return data;
       }
     } catch (error) {
-      logger.error(
+      logger(__filename).error(
         `LocationService.updateLocation: Error occurred :${inspect(error)}`,
       );
       throw error;
@@ -94,7 +97,7 @@ class LocationService {
 
   async deleteLocation({ id, is_deleted }) {
     try {
-      logger.info(`LocationService.deleteLocation called :`);
+      logger(__filename).info(`LocationService.deleteLocation called :`);
       const data = await knex(
         `${ENVIRONMENT.KNEX_SCHEMA}.${CONSTANTS.TABLES.LOCATION}`,
       )
@@ -112,7 +115,7 @@ class LocationService {
         return data;
       }
     } catch (error) {
-      logger.error(
+      logger(__filename).error(
         `LocationService.deleteLocation: Error occurred :${inspect(error)}`,
       );
       throw error;

@@ -3,6 +3,9 @@ import { CONSTANTS, RESPONSE_STATUS, ROLES_NAME } from "../Constants.js";
 import ENVIRONMENT from "../environment.js";
 import logger from "../logger.js";
 import { inspect } from "util";
+import { fileURLToPath } from "url";
+
+const __filename = fileURLToPath(import.meta.url);
 
 export const capabilityHandler = (req, roles) => {
   if (roles.length === 0) {
@@ -18,14 +21,14 @@ export const capabilityHandler = (req, roles) => {
     let token = req?.header(CONSTANTS.AUTHORIZATION);
     token = token?.replace("Bearer ", "");
     const decoded = jwt.verify(token, ENVIRONMENT.JWT_SECRET);
-    logger.info(`[ROLE ACCESS -> ${inspect(roles)}]`);
+    logger(__filename).info(`[ROLE ACCESS -> ${inspect(roles)}]`);
     if (roles?.includes(decoded?.role)) {
       return true;
     } else {
       return false;
     }
   } catch (error) {
-    logger.error(error);
+    logger(__filename).error(inspect(error));
     return false;
   }
 };
@@ -40,7 +43,7 @@ export const CAPABILITY =
         throw Error("Unauthorized to access this api.");
       }
     } catch {
-      logger.error({ message: `UNAUTHORIZED ACCESS!!` });
+      logger(__filename).error({ message: `UNAUTHORIZED ACCESS!!` });
       res.status(RESPONSE_STATUS.FORBIDDEN_403).send({
         message: `UNAUTHORIZED ACCESS!!`,
         status: CONSTANTS.STATUS.FAILURE,

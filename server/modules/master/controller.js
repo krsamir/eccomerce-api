@@ -11,13 +11,16 @@ import { handlers } from "@ecom/mail";
 import knex from "@ecom/datasource";
 import { genSaltSync, hashSync, compareSync } from "bcryptjs";
 import jwt from "jsonwebtoken";
+import { fileURLToPath } from "url";
+
+const __filename = fileURLToPath(import.meta.url);
 
 class MasterController {
   async forgotPassword(req, res) {
     const { email = "" } = req.body;
     const trx = await knex.transaction();
     try {
-      logger.info(`MasterController.forgotPassword called :`);
+      logger(__filename).info(`MasterController.forgotPassword called :`);
       if (!email) {
         return res.status(RESPONSE_STATUS.BAD_REQUEST_400).send({
           message: "Invalid Payload.",
@@ -69,7 +72,7 @@ class MasterController {
         });
       }
     } catch (error) {
-      logger.error(
+      logger(__filename).error(
         `MasterController.forgotPassword: Error occurred : ${inspect(error)}`,
       );
       trx.rollback();
@@ -99,7 +102,7 @@ class MasterController {
         });
       }
     } catch (error) {
-      logger.error(
+      logger(__filename).error(
         `MasterController.verification: Error occurred : ${inspect(error)}`,
       );
       throw error;
@@ -112,7 +115,7 @@ class MasterController {
   async setPassword(req, res) {
     const { email, password } = req.body;
     try {
-      logger.info(`MasterController.setPassword called :`);
+      logger(__filename).info(`MasterController.setPassword called :`);
       var salt = genSaltSync(CONSTANTS.AUTHENTICATION.BCRYPT_SALT);
       var hashedPassword = hashSync(password, salt);
       if (checkIsAuthenticatedHandler(req)) {
@@ -152,7 +155,7 @@ class MasterController {
         }
       }
     } catch (error) {
-      logger.error(
+      logger(__filename).error(
         `MasterController.setPassword: Error occurred : ${inspect(error)}`,
       );
       throw error;
@@ -162,7 +165,7 @@ class MasterController {
   async authenticate(req, res) {
     const { email, password, userName: user_name } = req.body;
     try {
-      logger.info(`MasterController.authenticate called :`);
+      logger(__filename).info(`MasterController.authenticate called :`);
       const data = await MasterService.getUserByEmail({ email, user_name });
       if (data) {
         if (data?.invalid_logins <= 0) {
@@ -224,7 +227,7 @@ class MasterController {
         });
       }
     } catch (error) {
-      logger.error(
+      logger(__filename).error(
         `MasterController.authenticate: Error occurred : ${inspect(error)}`,
       );
       throw error;

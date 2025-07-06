@@ -1,13 +1,16 @@
 import { CONSTANTS, logger, RESPONSE_STATUS } from "@ecom/utils";
 import { EntitiesService } from "@ecom/datasource";
 import { inspect } from "util";
+import { fileURLToPath } from "url";
+
+const __filename = fileURLToPath(import.meta.url);
 
 class EntitiesController {
   async createEntity(req, res) {
     const { name, gst, address, location_id, proprietor_name, categories } =
       req.body;
     try {
-      logger.info(`EntitiesController.createEntity called :`);
+      logger(__filename).info(`EntitiesController.createEntity called :`);
       // id needs to be created manually as uuid is not returned via knex in mysql
       const id = crypto.randomUUID();
       const data = await EntitiesService.createEntity({
@@ -26,7 +29,7 @@ class EntitiesController {
         data,
       });
     } catch (error) {
-      logger.error(
+      logger(__filename).error(
         `EntitiesController.createEntity: Error occurred : ${inspect(error)}`,
       );
       throw error;
@@ -35,7 +38,7 @@ class EntitiesController {
 
   async getAllEntitiesList(req, res) {
     try {
-      logger.info(`EntitiesController.getAllEntitiesList called :`);
+      logger(__filename).info(`EntitiesController.getAllEntitiesList called :`);
       const data = await EntitiesService.getAllEntitiesList({
         role: req?.role,
       });
@@ -45,7 +48,7 @@ class EntitiesController {
         data,
       });
     } catch (error) {
-      logger.error(
+      logger(__filename).error(
         `EntitiesController.getAllEntitiesList: Error occurred : ${inspect(error)}`,
       );
       throw error;
@@ -57,7 +60,7 @@ class EntitiesController {
 
     const { id } = req.params;
     try {
-      logger.info(`EntitiesController.updateEntity called :`);
+      logger(__filename).info(`EntitiesController.updateEntity called :`);
       const data = await EntitiesService.updateEntity(
         {
           ...entity,
@@ -72,7 +75,7 @@ class EntitiesController {
         data: data ? data : undefined,
       });
     } catch (error) {
-      logger.error(
+      logger(__filename).error(
         `EntitiesController.updateEntity: Error occurred : ${inspect(error)}`,
       );
       throw error;
@@ -82,7 +85,7 @@ class EntitiesController {
   async deleteEntity(req, res) {
     const { id } = req.params;
     try {
-      logger.info(`EntitiesController.deleteEntity called :`);
+      logger(__filename).info(`EntitiesController.deleteEntity called :`);
       const data = await EntitiesService.deleteEntity({
         id,
         is_deleted: true,
@@ -94,7 +97,7 @@ class EntitiesController {
         data: data ? data : undefined,
       });
     } catch (error) {
-      logger.error(
+      logger(__filename).error(
         `EntitiesController.deleteEntity: Error occurred : ${inspect(error)}`,
       );
       throw error;
@@ -103,7 +106,7 @@ class EntitiesController {
 
   async getEntityByID(req, res) {
     try {
-      logger.info(`EntitiesController.getEntityByID called :`);
+      logger(__filename).info(`EntitiesController.getEntityByID called :`);
       const { id } = req.params;
       const data = await EntitiesService.getEntityById({
         id,
@@ -115,7 +118,7 @@ class EntitiesController {
         data,
       });
     } catch (error) {
-      logger.error(
+      logger(__filename).error(
         `EntitiesController.getEntityByID: Error occurred : ${inspect(error)}`,
       );
       throw error;
@@ -124,7 +127,9 @@ class EntitiesController {
 
   async getEntityByLocationId(req, res) {
     try {
-      logger.info(`EntitiesController.getEntityByLocationId called :`);
+      logger(__filename).info(
+        `EntitiesController.getEntityByLocationId called :`,
+      );
       const { id } = req.params;
       const data = await EntitiesService.getEntityById({
         location_id: id,
@@ -136,7 +141,7 @@ class EntitiesController {
         data,
       });
     } catch (error) {
-      logger.error(
+      logger(__filename).error(
         `EntitiesController.getEntityByLocationId: Error occurred : ${inspect(error)}`,
       );
       throw error;

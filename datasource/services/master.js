@@ -5,13 +5,15 @@ import { inspect } from "util";
 class MasterService {
   async setTokenForEmailAndValidity({ email = "", payload = {}, trx }) {
     try {
-      logger.info(`MasterService.setTokenForEmailAndValidity called :`);
+      logger(__filename).info(
+        `MasterService.setTokenForEmailAndValidity called :`,
+      );
       return knex(`${ENVIRONMENT.KNEX_SCHEMA}.${CONSTANTS.TABLES.MASTER}`)
         .update({ ...payload })
         .where({ email })
         .transacting(trx);
     } catch (error) {
-      logger.error(
+      logger(__filename).error(
         `MasterService.setTokenForEmailAndValidity: Error occurred :${inspect(error)}`,
       );
       throw error;
@@ -20,7 +22,7 @@ class MasterService {
 
   async verifyEmailAndToken({ email = "", token = "" }) {
     try {
-      logger.info(`MasterService.verifyEmailAndToken called :`);
+      logger(__filename).info(`MasterService.verifyEmailAndToken called :`);
       const now = new Date();
       return knex(`${ENVIRONMENT.KNEX_SCHEMA}.${CONSTANTS.TABLES.MASTER}`)
         .update({
@@ -39,7 +41,7 @@ class MasterService {
         })
         .andWhereRaw("NOW() <= valid_till");
     } catch (error) {
-      logger.error(
+      logger(__filename).error(
         `MasterService.verifyEmailAndToken: Error occurred :${inspect(error)}`,
       );
       throw error;
@@ -48,7 +50,7 @@ class MasterService {
 
   async setPasswordWithoutLogin({ email = "", password = "" }) {
     try {
-      logger.info(`MasterService.setPasswordWithoutLogin called :`);
+      logger(__filename).info(`MasterService.setPasswordWithoutLogin called :`);
       return knex(`${ENVIRONMENT.KNEX_SCHEMA}.${CONSTANTS.TABLES.MASTER}`)
         .update({
           is_active: true,
@@ -64,7 +66,7 @@ class MasterService {
         })
         .andWhereRaw("NOW() <= valid_till");
     } catch (error) {
-      logger.error(
+      logger(__filename).error(
         `MasterService.setPasswordWithoutLogin: Error occurred :${inspect(error)}`,
       );
       throw error;
@@ -73,7 +75,7 @@ class MasterService {
 
   async setPasswordWithLogin({ email = "", password = "" }) {
     try {
-      logger.info(`MasterService.setPasswordWithLogin called :`);
+      logger(__filename).info(`MasterService.setPasswordWithLogin called :`);
       return knex(`${ENVIRONMENT.KNEX_SCHEMA}.${CONSTANTS.TABLES.MASTER}`)
         .update({
           invalid_logins: CONSTANTS.AUTHENTICATION.NO_OF_INVALID_LOGINS_COUNT,
@@ -87,7 +89,7 @@ class MasterService {
           is_deleted: false,
         });
     } catch (error) {
-      logger.error(
+      logger(__filename).error(
         `MasterService.setPasswordWithLogin: Error occurred :${inspect(error)}`,
       );
       throw error;
@@ -96,7 +98,7 @@ class MasterService {
 
   async getUserByEmail({ email = "", user_name = "" }) {
     try {
-      logger.info(`MasterService.getUserByEmail called :`);
+      logger(__filename).info(`MasterService.getUserByEmail called :`);
       return knex(
         `${ENVIRONMENT.KNEX_SCHEMA}.${CONSTANTS.TABLES.MASTER} as master`,
       )
@@ -118,7 +120,7 @@ class MasterService {
         .first()
         .join("role as role", "role.id", "master.role_id");
     } catch (error) {
-      logger.error(
+      logger(__filename).error(
         `MasterService.getUserByEmail: Error occurred :${inspect(error)}`,
       );
       throw error;
@@ -127,14 +129,14 @@ class MasterService {
 
   async setLoginDetails({ payload, condition }) {
     try {
-      logger.info(`MasterService.setLoginDetails called :`);
+      logger(__filename).info(`MasterService.setLoginDetails called :`);
       return knex(`${ENVIRONMENT.KNEX_SCHEMA}.${CONSTANTS.TABLES.MASTER}`)
         .update({
           ...payload,
         })
         .where({ ...condition });
     } catch (error) {
-      logger.error(
+      logger(__filename).error(
         `MasterService.setLoginDetails: Error occurred :${inspect(error)}`,
       );
       throw error;

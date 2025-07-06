@@ -41,7 +41,7 @@ app.use(interceptBody);
 app.use((req, res, next) => {
   const regex = /^\/api\/(master|product|location|entity)(?:\/.*)?$/;
   if (regex.test(req.path)) {
-    logger.info(CONSTANTS.ROUTE_LOGS);
+    logger(__filename).info(CONSTANTS.ROUTE_LOGS);
   }
   next();
 });
@@ -62,7 +62,9 @@ app.use((err, req, res, next) => {
       status: CONSTANTS.STATUS.FAILURE,
     });
   }
-  logger.error(`GLOBAL ERROR HANDLER::\n ${_.inspect(err, { depth: 6 })}`);
+  logger(__filename).error(
+    `GLOBAL ERROR HANDLER::\n ${_.inspect(err, { depth: 6 })}`,
+  );
 
   const error =
     ENVIRONMENT.NODE_ENV === CONSTANTS.ENVIRONMENT.DEVELOPMENT
@@ -86,9 +88,14 @@ app.use((err, req, res, next) => {
 
 // app.use(cors({ exposedHeaders: [CONSTANTS.HEADERS.COORELATION_ID] }));
 
+// app.use(express.static(path.join(__dirname, "../public")));
+// app.get("/*", (req, res) => {
+//   res.sendFile(path.join(__dirname, "../public", "index.html"));
+// });
+
 if (ENVIRONMENT.NODE_ENV !== CONSTANTS.ENVIRONMENT.DEVELOPMENT) {
   app.listen(ENVIRONMENT.PORT, () =>
-    logger.info(
+    logger(__filename)(__filename).info(
       `SERVER STARTED ON PORT ${
         ENVIRONMENT.PORT
       } AT ${new Date().toLocaleString()}`,
@@ -96,7 +103,7 @@ if (ENVIRONMENT.NODE_ENV !== CONSTANTS.ENVIRONMENT.DEVELOPMENT) {
   );
 } else {
   app.listen(ENVIRONMENT.PORT, ENVIRONMENT.NODE_HOST_NAME, () =>
-    logger.info(
+    logger(__filename).info(
       `SERVER STARTED ON PORT ${
         ENVIRONMENT.PORT
       } AT ${new Date().toLocaleString()}\nhttp://${ENVIRONMENT.NODE_HOST_NAME}:${ENVIRONMENT.PORT}`,

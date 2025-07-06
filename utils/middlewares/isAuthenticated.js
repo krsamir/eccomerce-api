@@ -2,6 +2,10 @@ import jwt from "jsonwebtoken";
 import ENVIRONMENT from "../environment.js";
 import { CONSTANTS, RESPONSE_STATUS } from "../Constants.js";
 import logger from "../logger.js";
+import { inspect } from "util";
+import { fileURLToPath } from "url";
+
+const __filename = fileURLToPath(import.meta.url);
 
 export const checkIsAuthenticatedHandler = (req) => {
   try {
@@ -15,7 +19,7 @@ export const checkIsAuthenticatedHandler = (req) => {
     req.role = decoded?.role;
     return true;
   } catch (error) {
-    logger.error(error);
+    logger(__filename).error(inspect(error));
     return false;
   }
 };
@@ -24,7 +28,9 @@ export const isAuthenticated = (req, res, next) => {
   if (checkIsAuthenticatedHandler(req)) {
     next();
   } else {
-    logger.error({ error: "Authentication Required. Please login again." });
+    logger(__filename).error({
+      error: "Authentication Required. Please login again.",
+    });
     res
       .status(RESPONSE_STATUS.UNAUTHORIZED_401)
       .send({ message: "Authentication Required. Please login again." });
