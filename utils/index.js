@@ -8,6 +8,7 @@ import {
   isAuthenticated,
 } from "./middlewares/isAuthenticated.js";
 import { CAPABILITY, capabilityHandler } from "./middlewares/isAuthorized.js";
+import TRANSFORMERS from "./transformers.js";
 
 export {
   coorelation,
@@ -20,4 +21,5 @@ export {
   capabilityHandler,
   isAuthenticated,
   CAPABILITY,
+  TRANSFORMERS,
 };

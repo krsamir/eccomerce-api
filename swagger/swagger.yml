@@ -14,6 +14,7 @@ security:
 tags:
   - name: MASTER
   - name: LOCATION
+  - name: ENTITIES
 paths:
   /api/master/forgot-password:
     post:
@@ -146,6 +147,96 @@ paths:
                 state: Bihar
                 country: Bharat
                 delete: false
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json: {}
+  /api/entity:
+    get:
+      tags:
+        - ENTITIES
+      summary: GET ALL ENTITIES
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json: {}
+    post:
+      tags:
+        - ENTITIES
+      summary: CREATE ENTITY
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                name: Bharat Prasad General Store
+                gst: 10DKQPP6909G1ZX
+                address: Dumri, Buxar, Bihar
+                location_id: 92dd3112-e37c-425b-a588-d60b55a5e0de
+                proprietor_name: Ashok Prasad
+                categories:
+                  - Grocery
+                  - Cosmetics
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json: {}
+  /api/entity/4ba3eaca-a83d-4bf6-bbc2-0a263b7a65f0:
+    get:
+      tags:
+        - ENTITIES
+      summary: GET ENTITY BY ID
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json: {}
+    patch:
+      tags:
+        - ENTITIES
+      summary: UPDATE ENTITY
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                name: TEST
+                gst: TEST
+                address: TEST
+                location_id: 92dd3112-e37c-425b-a588-d60b55a5e0de
+                proprietor_name: TEST
+                categories:
+                  - Grocery
+                  - Cosmetics
+                  - ELECTRICAL
+                is_active: true
+                max_admin: 5
+                max_manager: 7
+                delete: false
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json: {}
+    delete:
+      tags:
+        - ENTITIES
+      summary: DELETE ENTITY
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json: {}
+  /api/entity/location/92dd3112-e37c-425b-a588-d60b55a5e0de:
+    get:
+      tags:
+        - ENTITIES
+      summary: GET ENTITY BY LOCATION ID
       responses:
         "200":
           description: Successful response

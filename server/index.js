@@ -39,7 +39,7 @@ app.use(cors("*"));
 app.use(interceptBody);
 
 app.use((req, res, next) => {
-  const regex = /^\/api\/(master|product|location)(?:\/.*)?$/;
+  const regex = /^\/api\/(master|product|location|entity)(?:\/.*)?$/;
   if (regex.test(req.path)) {
     logger.info(CONSTANTS.ROUTE_LOGS);
   }
@@ -65,9 +65,14 @@ app.use((err, req, res, next) => {
   logger.error(`GLOBAL ERROR HANDLER::\n ${_.inspect(err, { depth: 6 })}`);
 
   const error =
-    ENVIRONMENT.NODE_ENV === "development"
+    ENVIRONMENT.NODE_ENV === CONSTANTS.ENVIRONMENT.DEVELOPMENT
       ? {
+          warning:
+            ENVIRONMENT.NODE_ENV === "development"
+              ? "⚠️ DO NOT RELY OR ADD ANY ERROR HANDLING ON error OBJECT AS IT WILL NOT BE AVAILABLE IN ANY OTHER ENVIRONMENT OTHER THAN DEVELOPMENT!. message FIELD CAN BE USED FOR ERROR HANDLING."
+              : undefined,
           error: {
+            err,
             name: err.name,
             message: err.message,
             stack: err.stack,
