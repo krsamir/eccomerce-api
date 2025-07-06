@@ -1,8 +1,12 @@
 import jwt from "jsonwebtoken";
 import { CONSTANTS, RESPONSE_STATUS, ROLES_NAME } from "../Constants.js";
 import ENVIRONMENT from "../environment.js";
-import logger from "../logger.js";
+import logs from "../logger.js";
 import { inspect } from "util";
+import { fileURLToPath } from "url";
+const __filename = fileURLToPath(import.meta.url);
+
+let logger = logs(__filename);
 
 export const capabilityHandler = (req, roles) => {
   if (roles.length === 0) {
@@ -25,7 +29,7 @@ export const capabilityHandler = (req, roles) => {
       return false;
     }
   } catch (error) {
-    logger.error(error);
+    logger.error(inspect(error));
     return false;
   }
 };

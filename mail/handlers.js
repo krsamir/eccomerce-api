@@ -1,6 +1,11 @@
-import { ENVIRONMENT, logger } from "@ecom/utils";
+import { fileURLToPath } from "url";
+import { ENVIRONMENT, logger as logs } from "@ecom/utils";
 import transporter from "./transporter.js";
 import { inspect } from "util";
+
+const __filename = fileURLToPath(import.meta.url);
+let logger = logs(__filename);
+
 const handlers = {};
 
 const checkValidOptions = ({ to = "", subject = "" }) => {

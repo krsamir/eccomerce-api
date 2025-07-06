@@ -1,7 +1,11 @@
+import { fileURLToPath } from "url";
 import { CONSTANTS } from "./Constants.js";
 import ENVIRONMENT from "./environment.js";
-import logger from "./logger.js";
+import logs from "./logger.js";
 import { inspect } from "util";
+
+const __filename = fileURLToPath(import.meta.url);
+let logger = logs(__filename);
 
 const interceptBody = (req, res, next) => {
   if (

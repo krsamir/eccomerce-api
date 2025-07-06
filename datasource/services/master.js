@@ -1,6 +1,10 @@
-import { ENVIRONMENT, logger, CONSTANTS } from "@ecom/utils";
+import { fileURLToPath } from "url";
+import { ENVIRONMENT, logger as logs, CONSTANTS } from "@ecom/utils";
 import knex from "../knexClient.js";
 import { inspect } from "util";
+
+const __filename = fileURLToPath(import.meta.url);
+let logger = logs(__filename);
 
 class MasterService {
   async setTokenForEmailAndValidity({ email = "", payload = {}, trx }) {

@@ -1,7 +1,11 @@
-import { ENVIRONMENT, logger, CONSTANTS } from "@ecom/utils";
+import { ENVIRONMENT, logger as logs, CONSTANTS } from "@ecom/utils";
 import knex from "../knexClient.js";
 import { inspect } from "util";
 import { ROLES_NAME } from "@ecom/utils/Constants.js";
+import { fileURLToPath } from "url";
+
+const __filename = fileURLToPath(import.meta.url);
+let logger = logs(__filename);
 
 class LocationService {
   async getAllLocations({ role }) {

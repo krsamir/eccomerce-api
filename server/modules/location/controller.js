@@ -1,6 +1,10 @@
-import { CONSTANTS, logger, RESPONSE_STATUS } from "@ecom/utils";
+import { fileURLToPath } from "url";
+import { CONSTANTS, logger as logs, RESPONSE_STATUS } from "@ecom/utils";
 import { LocationService } from "@ecom/datasource";
 import { inspect } from "util";
+
+const __filename = fileURLToPath(import.meta.url);
+let logger = logs(__filename);
 
 class LocationController {
   async getAllLocations(req, res) {

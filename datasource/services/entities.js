@@ -1,7 +1,16 @@
-import { ENVIRONMENT, logger, CONSTANTS, TRANSFORMERS } from "@ecom/utils";
+import {
+  ENVIRONMENT,
+  logger as logs,
+  CONSTANTS,
+  TRANSFORMERS,
+} from "@ecom/utils";
+import { fileURLToPath } from "url";
 import knex from "../knexClient.js";
 import { inspect } from "util";
 import { ROLES_NAME } from "@ecom/utils/Constants.js";
+
+const __filename = fileURLToPath(import.meta.url);
+let logger = logs(__filename);
 
 const GET_ALL_ENTITY_RETURNING = [
   "entity.*",

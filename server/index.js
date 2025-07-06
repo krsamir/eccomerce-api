@@ -8,7 +8,7 @@ import _ from "util";
 import { errors } from "celebrate";
 import {
   coorelation,
-  logger,
+  logger as logs,
   ENVIRONMENT,
   interceptBody,
   RESPONSE_STATUS,
@@ -20,6 +20,7 @@ import appRoutes from "./routes.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
+let logger = logs(__filename);
 
 const file = fs.readFileSync(
   path.join(__dirname, "../swagger/swagger.yml"),
@@ -85,6 +86,10 @@ app.use((err, req, res, next) => {
 });
 
 // app.use(cors({ exposedHeaders: [CONSTANTS.HEADERS.COORELATION_ID] }));
+// app.use(express.static(path.join(__dirname, "../public")));
+// app.get("/*", (req, res) => {
+//   res.sendFile(path.join(__dirname, "../public", "index.html"));
+// });
 
 if (ENVIRONMENT.NODE_ENV !== CONSTANTS.ENVIRONMENT.DEVELOPMENT) {
   app.listen(ENVIRONMENT.PORT, () =>

@@ -1,6 +1,10 @@
-import { CONSTANTS, logger, RESPONSE_STATUS } from "@ecom/utils";
+import { CONSTANTS, logger as logs, RESPONSE_STATUS } from "@ecom/utils";
 import { EntitiesService } from "@ecom/datasource";
 import { inspect } from "util";
+import { fileURLToPath } from "url";
+
+const __filename = fileURLToPath(import.meta.url);
+let logger = logs(__filename);
 
 class EntitiesController {
   async createEntity(req, res) {

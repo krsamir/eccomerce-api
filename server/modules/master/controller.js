@@ -2,7 +2,7 @@ import {
   checkIsAuthenticatedHandler,
   CONSTANTS,
   ENVIRONMENT,
-  logger,
+  logger as logs,
   RESPONSE_STATUS,
 } from "@ecom/utils";
 import { MasterService } from "@ecom/datasource";
@@ -11,6 +11,10 @@ import { handlers } from "@ecom/mail";
 import knex from "@ecom/datasource";
 import { genSaltSync, hashSync, compareSync } from "bcryptjs";
 import jwt from "jsonwebtoken";
+import { fileURLToPath } from "url";
+
+const __filename = fileURLToPath(import.meta.url);
+let logger = logs(__filename);
 
 class MasterController {
   async forgotPassword(req, res) {
