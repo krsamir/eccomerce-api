@@ -1,14 +1,34 @@
 import { ENVIRONMENT, logger, CONSTANTS } from "@ecom/utils";
 import knex from "../knexClient.js";
 import { inspect } from "util";
+import { ROLES_NAME } from "@ecom/utils/Constants.js";
 
 class LocationService {
-  async getAllLocations() {
+  async getAllLocations({ role }) {
+    let returning = ["id", "name", "city", "state", "country"];
+
+    if (ROLES_NAME.SUPER_ADMIN === role) {
+      returning = [
+        "id",
+        "name",
+        "city",
+        "state",
+        "country",
+        "is_deleted",
+        "created_at",
+        "updated_at",
+      ];
+    }
+
     try {
       logger.info(`LocationService.getAllLocations called :`);
-      return knex(
+      const query = knex(
         `${ENVIRONMENT.KNEX_SCHEMA}.${CONSTANTS.TABLES.LOCATION}`,
-      ).select();
+      ).select(returning);
+
+      if (role !== ROLES_NAME.SUPER_ADMIN) query.where({ is_deleted: false });
+
+      return await query;
     } catch (error) {
       logger.error(
         `LocationService.getAllLocations: Error occurred :${inspect(error)}`,

@@ -6,7 +6,7 @@ class LocationController {
   async getAllLocations(req, res) {
     try {
       logger.info(`LocationController.getAllLocations called :`);
-      const data = await LocationService.getAllLocations();
+      const data = await LocationService.getAllLocations({ role: req?.role });
       return res.status(RESPONSE_STATUS.OK_200).send({
         message: "",
         status: CONSTANTS.STATUS.SUCCESS,
