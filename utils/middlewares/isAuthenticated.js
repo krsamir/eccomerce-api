@@ -11,7 +11,6 @@ let logger = logs(__filename);
 export const checkIsAuthenticatedHandler = (req) => {
   try {
     let token = req.header(CONSTANTS.AUTHORIZATION);
-    console.log("🚀 ~ checkIsAuthenticatedHandler ~ token:", token);
     token = token?.replace("Bearer ", "");
     const decoded = jwt.verify(token, ENVIRONMENT.JWT_SECRET);
     req.id = decoded?.id;
