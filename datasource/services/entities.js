@@ -39,6 +39,7 @@ const GET_ENTITY_NON_ADMIN = [
 ];
 class EntitiesService {
   async getEntityById({ id, role, location_id }) {
+    logger.info(`EntitiesService.getEntityById called :`);
     let returning = GET_ENTITY_NON_ADMIN;
     if (role === ROLES_NAME.SUPER_ADMIN) {
       returning = GET_ALL_ENTITY_RETURNING;
