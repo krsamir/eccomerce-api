@@ -1,9 +1,15 @@
 import winston from "winston";
 import asyncLocalStorage from "./context.js";
 import { CONSTANTS } from "./Constants.js";
+import os from "os";
 
 const logger = (__filename) => {
-  const file_list = __filename.split("\\");
+  let file_list = "";
+  if (os.platform() === "linux") {
+    file_list = __filename.split("/");
+  } else {
+    file_list = __filename.split("\\");
+  }
   const len = file_list?.length;
 
   let paths = "";
