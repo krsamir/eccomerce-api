@@ -18,4 +18,18 @@ TRANSFORMERS.entityLocationTransformers = (result) => {
   throw Error("data not found");
 };
 
+TRANSFORMERS.masterRoleTransformers = (result) => {
+  if (result) {
+    const { role_id, role_name, ...entityData } = result;
+    return {
+      ...entityData,
+      role: {
+        id: role_id,
+        name: role_name,
+      },
+    };
+  }
+  throw Error("data not found");
+};
+
 export default TRANSFORMERS;

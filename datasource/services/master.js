@@ -1,11 +1,22 @@
 import { fileURLToPath } from "url";
-import { ENVIRONMENT, logger as logs, CONSTANTS } from "@ecom/utils";
+import {
+  ENVIRONMENT,
+  logger as logs,
+  CONSTANTS,
+  TRANSFORMERS,
+} from "@ecom/utils";
 import knex from "../knexClient.js";
 import { inspect } from "util";
+import { ROLES_NAME } from "@ecom/utils/Constants.js";
 
 const __filename = fileURLToPath(import.meta.url);
 let logger = logs(__filename);
 
+const GET_MASTER_SUPER_ADMIN = [
+  "master.*",
+  "role.id as role_id",
+  "role.name as role_name",
+];
 class MasterService {
   async setTokenForEmailAndValidity({ email = "", payload = {}, trx }) {
     try {
@@ -140,6 +151,44 @@ class MasterService {
     } catch (error) {
       logger.error(
         `MasterService.setLoginDetails: Error occurred :${inspect(error)}`,
+      );
+      throw error;
+    }
+  }
+
+  async getAllUsersList({ role }) {
+    let returning = GET_MASTER_SUPER_ADMIN;
+    if (role === ROLES_NAME.SUPER_ADMIN) {
+      returning = GET_MASTER_SUPER_ADMIN;
+    }
+    try {
+      logger.info(`MasterService.getAllUsersList called :`);
+      let baseQuery = knex(
+        `${ENVIRONMENT.KNEX_SCHEMA}.${CONSTANTS.TABLES.MASTER}`,
+      )
+        .select(returning)
+        .join(
+          CONSTANTS.TABLES.ROLE,
+          `${CONSTANTS.TABLES.ROLE}.id`,
+          "=",
+          `${CONSTANTS.TABLES.MASTER}.role_id`,
+        );
+
+      // if (role !== ROLES_NAME.SUPER_ADMIN) {
+      //   baseQuery?.where({
+      //     "entity.is_active": true,
+      //     "entity.is_deleted": false,
+      //   });
+      // }
+
+      baseQuery.orderBy(`${CONSTANTS.TABLES.MASTER}.created_at`, "desc");
+
+      const result = await baseQuery;
+      // return result;
+      return result.map(TRANSFORMERS.masterRoleTransformers);
+    } catch (error) {
+      logger.error(
+        `MasterService.getAllUsersList: Error occurred :${inspect(error)}`,
       );
       throw error;
     }

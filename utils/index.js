@@ -9,6 +9,11 @@ import {
 } from "./middlewares/isAuthenticated.js";
 import { CAPABILITY, capabilityHandler } from "./middlewares/isAuthorized.js";
 import TRANSFORMERS from "./transformers.js";
+import {
+  toCamelCase,
+  toSnakeCase,
+  interceptResponse,
+} from "./caseConverter.js";
 
 export {
   coorelation,
@@ -22,4 +27,7 @@ export {
   isAuthenticated,
   CAPABILITY,
   TRANSFORMERS,
+  toCamelCase,
+  toSnakeCase,
+  interceptResponse,
 };

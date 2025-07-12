@@ -234,6 +234,28 @@ class MasterController {
       throw error;
     }
   }
+
+  async getAllUsersList(req, res) {
+    const { role } = req;
+    console.log("🚀 ~ MasterController ~ getAllUsersList ~ role:", role);
+    try {
+      logger.info(`MasterController.getAllUsersList called :`);
+      const data = await MasterService.getAllUsersList({
+        role: req.role,
+      });
+      return res.status(RESPONSE_STATUS.OK_200).send({
+        message: "",
+        status: CONSTANTS.STATUS.SUCCESS,
+        data,
+        // keepSnakeCase: true,
+      });
+    } catch (error) {
+      logger.error(
+        `MasterController.getAllUsersList: Error occurred : ${inspect(error)}`,
+      );
+      throw error;
+    }
+  }
 }
 
 export default new MasterController();

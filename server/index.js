@@ -12,6 +12,7 @@ import {
   ENVIRONMENT,
   interceptBody,
   RESPONSE_STATUS,
+  interceptResponse,
 } from "@ecom/utils";
 import cors from "cors";
 import { CONSTANTS } from "@ecom/utils";
@@ -38,6 +39,7 @@ app.use(express.json());
 app.use(coorelation);
 app.use(cors("*"));
 app.use(interceptBody);
+app.use(interceptResponse);
 
 app.use((req, res, next) => {
   const regex = /^\/api\/(master|product|location|entity)(?:\/.*)?$/;
