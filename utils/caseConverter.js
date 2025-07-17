@@ -31,7 +31,6 @@ export const toCamelCase = (obj) => {
         letter.toUpperCase(),
       );
       acc[camelKey] = toCamelCase(obj[key]);
-      console.log("🚀 ~ returnObject.keys ~ acc:", key, obj[key], camelKey);
       return acc;
     }, {});
   }
