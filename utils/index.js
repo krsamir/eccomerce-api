@@ -13,6 +13,7 @@ import {
   toCamelCase,
   toSnakeCase,
   interceptResponse,
+  interceptPayloadRequest,
 } from "./caseConverter.js";
 
 export {
@@ -30,4 +31,5 @@ export {
   toCamelCase,
   toSnakeCase,
   interceptResponse,
+  interceptPayloadRequest,
 };

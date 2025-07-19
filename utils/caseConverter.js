@@ -55,3 +55,10 @@ export const interceptResponse = (req, res, next) => {
   };
   next();
 };
+
+export const interceptPayloadRequest = (req, res, next) => {
+  if (req.body && typeof req.body === "object") {
+    req.body = toSnakeCase(req.body);
+  }
+  next();
+};

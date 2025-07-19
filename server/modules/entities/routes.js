@@ -2,7 +2,11 @@ import express from "express";
 import Controller from "./controller.js";
 import validator from "./validator.js";
 import { celebrate } from "celebrate";
-import { CAPABILITY, isAuthenticated } from "@ecom/utils";
+import {
+  CAPABILITY,
+  interceptPayloadRequest,
+  isAuthenticated,
+} from "@ecom/utils";
 import { ROLES_NAME } from "@ecom/utils/Constants.js";
 
 export default express
@@ -12,6 +16,7 @@ export default express
     "/",
     CAPABILITY([ROLES_NAME.SUPER_ADMIN]),
     celebrate(validator.createEntity()),
+    interceptPayloadRequest,
     Controller.createEntity.bind(Controller),
   )
   .get("/", Controller.getAllEntitiesList.bind(Controller))
@@ -19,6 +24,7 @@ export default express
     "/:id",
     CAPABILITY([ROLES_NAME.SUPER_ADMIN]),
     celebrate(validator.updateEntity()),
+    interceptPayloadRequest,
     Controller.updateEntity.bind(Controller),
   )
   .delete(
