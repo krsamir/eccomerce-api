@@ -20,9 +20,10 @@ TRANSFORMERS.entityLocationTransformers = (result) => {
 
 TRANSFORMERS.masterRoleTransformers = (result) => {
   if (result) {
-    const { role_id, role_name, ...entityData } = result;
+    const { role_id, role_name, password, ...entityData } = result;
     return {
       ...entityData,
+      password: undefined,
       role: {
         id: role_id,
         name: role_name,

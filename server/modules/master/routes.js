@@ -13,6 +13,19 @@ export default express
     CAPABILITY([ROLES_NAME.SUPER_ADMIN, ROLES_NAME.ADMIN]),
     Controller.getAllUsersList.bind(Controller),
   )
+  .get(
+    "/user-id/:id",
+    isAuthenticated,
+    CAPABILITY([ROLES_NAME.SUPER_ADMIN]),
+    celebrate(validator.getUserByID()),
+    Controller.getUserById.bind(Controller),
+  )
+  .get(
+    "/roles",
+    isAuthenticated,
+    CAPABILITY([ROLES_NAME.SUPER_ADMIN]),
+    Controller.getAllRoles.bind(Controller),
+  )
   .post(
     "/forgot-password",
     celebrate(validator.forgotPassword()),

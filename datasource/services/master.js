@@ -17,6 +17,9 @@ const GET_MASTER_SUPER_ADMIN = [
   "role.id as role_id",
   "role.name as role_name",
 ];
+
+const GET_ROLES_SUPER_ADMIN = ["*"];
+const GET_ROLES_NON_SUPER_ADMIN = ["name"];
 class MasterService {
   async setTokenForEmailAndValidity({ email = "", payload = {}, trx }) {
     try {
@@ -183,12 +186,60 @@ class MasterService {
 
       baseQuery.orderBy(`${CONSTANTS.TABLES.MASTER}.created_at`, "desc");
 
-      const result = await baseQuery;
-      // return result;
-      return result.map(TRANSFORMERS.masterRoleTransformers);
+      return baseQuery;
     } catch (error) {
       logger.error(
         `MasterService.getAllUsersList: Error occurred :${inspect(error)}`,
+      );
+      throw error;
+    }
+  }
+
+  async getUserById({ role, id }) {
+    let returning = GET_MASTER_SUPER_ADMIN;
+    if (role === ROLES_NAME.SUPER_ADMIN) {
+      returning = GET_MASTER_SUPER_ADMIN;
+    }
+    try {
+      logger.info(`MasterService.getUserById called :`);
+      return knex(`${ENVIRONMENT.KNEX_SCHEMA}.${CONSTANTS.TABLES.MASTER}`)
+        .select(returning)
+        .where({ "master.id": id })
+        .join(
+          CONSTANTS.TABLES.ROLE,
+          `${CONSTANTS.TABLES.ROLE}.id`,
+          "=",
+          `${CONSTANTS.TABLES.MASTER}.role_id`,
+        )
+        .first();
+
+      // if (role !== ROLES_NAME.SUPER_ADMIN) {
+      //   baseQuery?.where({
+      //     "entity.is_active": true,
+      //     "entity.is_deleted": false,
+      //   });
+      // }
+    } catch (error) {
+      logger.error(
+        `MasterService.getUserById: Error occurred :${inspect(error)}`,
+      );
+      throw error;
+    }
+  }
+
+  async getAllRoles({ role }) {
+    let returning = GET_ROLES_NON_SUPER_ADMIN;
+    if (role === ROLES_NAME.SUPER_ADMIN) {
+      returning = GET_ROLES_SUPER_ADMIN;
+    }
+    try {
+      logger.info(`MasterService.getAllRoles called :`);
+      return knex(`${ENVIRONMENT.KNEX_SCHEMA}.${CONSTANTS.TABLES.ROLE}`).select(
+        returning,
+      );
+    } catch (error) {
+      logger.error(
+        `MasterService.getAllRoles: Error occurred :${inspect(error)}`,
       );
       throw error;
     }

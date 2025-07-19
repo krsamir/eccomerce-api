@@ -33,6 +33,13 @@ class SchemaValidator {
       }),
     };
   }
+  getUserByID() {
+    return {
+      [Segments.PARAMS]: Joi.object({
+        id: Joi.string().required(),
+      }),
+    };
+  }
 }
 
 export default new SchemaValidator();

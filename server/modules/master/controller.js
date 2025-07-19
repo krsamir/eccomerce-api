@@ -4,6 +4,8 @@ import {
   ENVIRONMENT,
   logger as logs,
   RESPONSE_STATUS,
+  TRANSFORMERS,
+  transformText,
 } from "@ecom/utils";
 import { MasterService } from "@ecom/datasource";
 import { inspect } from "util";
@@ -237,7 +239,6 @@ class MasterController {
 
   async getAllUsersList(req, res) {
     const { role } = req;
-    console.log("🚀 ~ MasterController ~ getAllUsersList ~ role:", role);
     try {
       logger.info(`MasterController.getAllUsersList called :`);
       const data = await MasterService.getAllUsersList({
@@ -246,12 +247,54 @@ class MasterController {
       return res.status(RESPONSE_STATUS.OK_200).send({
         message: "",
         status: CONSTANTS.STATUS.SUCCESS,
-        data,
+        data: data.map(TRANSFORMERS.masterRoleTransformers),
         // keepSnakeCase: true,
       });
     } catch (error) {
       logger.error(
         `MasterController.getAllUsersList: Error occurred : ${inspect(error)}`,
+      );
+      throw error;
+    }
+  }
+
+  async getUserById(req, res) {
+    const { role } = req;
+
+    console.log("🚀 ~ MasterController ~ getUserById ~ role:", role);
+    try {
+      logger.info(`MasterController.getUserById called :`);
+      const data = await MasterService.getUserById({
+        role: req.role,
+        id: req?.params?.id,
+      });
+      return res.status(RESPONSE_STATUS.OK_200).send({
+        message: "",
+        status: CONSTANTS.STATUS.SUCCESS,
+        data: TRANSFORMERS.masterRoleTransformers(data),
+      });
+    } catch (error) {
+      logger.error(
+        `MasterController.getUserById: Error occurred : ${inspect(error)}`,
+      );
+      throw error;
+    }
+  }
+  async getAllRoles(req, res) {
+    const { role } = req;
+    try {
+      logger.info(`MasterController.getAllRoles called :`);
+      const data = await MasterService.getAllRoles({
+        role: req.role,
+      });
+      return res.status(RESPONSE_STATUS.OK_200).send({
+        message: "",
+        status: CONSTANTS.STATUS.SUCCESS,
+        data: data.map((val) => ({ ...val, name: transformText(val.name) })),
+      });
+    } catch (error) {
+      logger.error(
+        `MasterController.getAllRoles: Error occurred : ${inspect(error)}`,
       );
       throw error;
     }

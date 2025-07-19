@@ -1,3 +1,5 @@
+export const transformText = (str) => (str ? str?.replace("_", " ") : "");
+
 // Convert camelCase to snake_case
 export const toSnakeCase = (obj) => {
   if (Array.isArray(obj)) {
