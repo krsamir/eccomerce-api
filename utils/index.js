@@ -15,6 +15,7 @@ import {
   interceptResponse,
   interceptPayloadRequest,
   transformText,
+  transformStringToSnakeCase,
 } from "./caseConverter.js";
 
 export {
@@ -34,4 +35,5 @@ export {
   interceptResponse,
   interceptPayloadRequest,
   transformText,
+  transformStringToSnakeCase,
 };

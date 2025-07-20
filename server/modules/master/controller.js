@@ -269,7 +269,7 @@ class MasterController {
       return res.status(RESPONSE_STATUS.OK_200).send({
         message: "",
         status: CONSTANTS.STATUS.SUCCESS,
-        data: TRANSFORMERS.masterRoleTransformers(data),
+        data: data ? TRANSFORMERS.masterRoleTransformers(data) : {},
       });
     } catch (error) {
       logger.error(
@@ -293,6 +293,68 @@ class MasterController {
     } catch (error) {
       logger.error(
         `MasterController.getAllRoles: Error occurred : ${inspect(error)}`,
+      );
+      throw error;
+    }
+  }
+
+  async checkIfvalueExists(req, res) {
+    const { type, value } = req.body;
+    try {
+      logger.info(`MasterController.checkIfvalueExists called :`);
+      const data = await MasterService.checkIfvalueExists({ type, value });
+      return res.status(RESPONSE_STATUS.OK_200).send({
+        message: "",
+        status: CONSTANTS.STATUS.SUCCESS,
+        data: { isExisting: data?.length > 0 },
+      });
+    } catch (error) {
+      logger.error(
+        `MasterController.checkIfvalueExists: Error occurred : ${inspect(error)}`,
+      );
+      throw error;
+    }
+  }
+
+  async createMasterUser(req, res) {
+    const { ...userDetail } = req.body;
+    try {
+      logger.info(`MasterController.createMasterUser called :`);
+      const id = crypto.randomUUID();
+      await MasterService.createMasterUser({
+        ...userDetail,
+        id,
+        created_by: req?.id,
+      });
+      return res.status(RESPONSE_STATUS.OK_200).send({
+        message: "User Created",
+        status: CONSTANTS.STATUS.SUCCESS,
+        data: { id },
+      });
+    } catch (error) {
+      logger.error(
+        `MasterController.createMasterUser: Error occurred : ${inspect(error)}`,
+      );
+      throw error;
+    }
+  }
+
+  async updateMasterUser(req, res) {
+    const { ...userDetail } = req.body;
+    try {
+      logger.info(`MasterController.updateMasterUser called :`);
+      const data = await MasterService.updateMasterUser({
+        ...userDetail,
+        role_id: userDetail.roles,
+      });
+
+      return res.status(RESPONSE_STATUS.OK_200).send({
+        message: data === 1 ? "User Updated" : "Unable to update user",
+        status: CONSTANTS.STATUS.SUCCESS,
+      });
+    } catch (error) {
+      logger.error(
+        `MasterController.updateMasterUser: Error occurred : ${inspect(error)}`,
       );
       throw error;
     }

@@ -1,5 +1,8 @@
 export const transformText = (str) => (str ? str?.replace("_", " ") : "");
 
+export const transformStringToSnakeCase = (str) =>
+  str ? str.replace(/[A-Z]/g, (letter) => `_${letter.toLowerCase()}`) : "";
+
 // Convert camelCase to snake_case
 export const toSnakeCase = (obj) => {
   if (Array.isArray(obj)) {

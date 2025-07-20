@@ -1,5 +1,10 @@
 import { fileURLToPath } from "url";
-import { ENVIRONMENT, logger as logs, CONSTANTS } from "@ecom/utils";
+import {
+  ENVIRONMENT,
+  logger as logs,
+  CONSTANTS,
+  transformStringToSnakeCase,
+} from "@ecom/utils";
 import knex from "../knexClient.js";
 import { inspect } from "util";
 import { ROLES_NAME } from "@ecom/utils/Constants.js";
@@ -248,6 +253,62 @@ class MasterService {
     } catch (error) {
       logger.error(
         `MasterService.getAllRoles: Error occurred :${inspect(error)}`,
+      );
+      throw error;
+    }
+  }
+
+  async checkIfvalueExists({ type, value }) {
+    try {
+      logger.info(`MasterService.checkIfvalueExists called :`);
+      return knex(`${ENVIRONMENT.KNEX_SCHEMA}.${CONSTANTS.TABLES.MASTER}`)
+        .select()
+        .where({ [transformStringToSnakeCase(type)]: value });
+    } catch (error) {
+      logger.error(
+        `MasterService.checkIfvalueExists: Error occurred :${inspect(error)}`,
+      );
+      throw error;
+    }
+  }
+
+  async createMasterUser({ ...user }) {
+    try {
+      logger.info(`MasterService.createMasterUser called :`);
+      return knex(
+        `${ENVIRONMENT.KNEX_SCHEMA}.${CONSTANTS.TABLES.MASTER}`,
+      ).insert({
+        id: user.id,
+        user_name: user.user_name,
+        email: user.email,
+        first_name: user.first_name,
+        last_name: user.last_name,
+        mobile: user.mobile,
+        role_id: user.roles,
+        is_active: user.is_active,
+        is_deleted: user.is_deleted,
+        created_by: user?.created_by,
+      });
+    } catch (error) {
+      logger.error(
+        `MasterService.createMasterUser: Error occurred :${inspect(error)}`,
+      );
+      throw error;
+    }
+  }
+
+  async updateMasterUser({ id, ...user }) {
+    delete user.roles;
+    try {
+      logger.info(`MasterService.updateMasterUser called :`);
+      return knex(`${ENVIRONMENT.KNEX_SCHEMA}.${CONSTANTS.TABLES.MASTER}`)
+        .update({
+          ...user,
+        })
+        .where({ id });
+    } catch (error) {
+      logger.error(
+        `MasterService.updateMasterUser: Error occurred :${inspect(error)}`,
       );
       throw error;
     }

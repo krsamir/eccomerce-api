@@ -2,7 +2,11 @@ import express from "express";
 import Controller from "./controller.js";
 import validator from "./validator.js";
 import { celebrate } from "celebrate";
-import { CAPABILITY, isAuthenticated } from "@ecom/utils";
+import {
+  CAPABILITY,
+  interceptPayloadRequest,
+  isAuthenticated,
+} from "@ecom/utils";
 import { ROLES_NAME } from "@ecom/utils/Constants.js";
 
 export default express
@@ -12,6 +16,22 @@ export default express
     isAuthenticated,
     CAPABILITY([ROLES_NAME.SUPER_ADMIN, ROLES_NAME.ADMIN]),
     Controller.getAllUsersList.bind(Controller),
+  )
+  .post(
+    "/",
+    isAuthenticated,
+    CAPABILITY([ROLES_NAME.SUPER_ADMIN]),
+    celebrate(validator.createMasterUser()),
+    interceptPayloadRequest,
+    Controller.createMasterUser.bind(Controller),
+  )
+  .patch(
+    "/",
+    isAuthenticated,
+    CAPABILITY([ROLES_NAME.SUPER_ADMIN]),
+    celebrate(validator.updateMasterUser()),
+    interceptPayloadRequest,
+    Controller.updateMasterUser.bind(Controller),
   )
   .get(
     "/user-id/:id",
@@ -45,4 +65,12 @@ export default express
     "/login",
     celebrate(validator.authenticate()),
     Controller.authenticate.bind(Controller),
+  )
+  .post(
+    "/check-if-exists",
+    isAuthenticated,
+    CAPABILITY([ROLES_NAME.SUPER_ADMIN]),
+    celebrate(validator.checkIfExists()),
+    interceptPayloadRequest,
+    Controller.checkIfvalueExists.bind(Controller),
   );
