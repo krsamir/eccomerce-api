@@ -22,7 +22,6 @@ export const capabilityHandler = (req, roles) => {
     let token = req?.header(CONSTANTS.AUTHORIZATION);
     token = token?.replace("Bearer ", "");
     const decoded = jwt.verify(token, ENVIRONMENT.JWT_SECRET);
-    logger.info(`[ROLE ACCESS -> ${inspect(roles)}]`);
     if (roles?.includes(decoded?.role)) {
       return true;
     } else {

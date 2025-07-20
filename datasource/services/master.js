@@ -11,6 +11,7 @@ const GET_MASTER_SUPER_ADMIN = [
   "master.*",
   "role.id as role_id",
   "role.name as role_name",
+  "creator.email as created_by_user",
 ];
 
 const GET_ROLES_SUPER_ADMIN = ["*"];
@@ -170,6 +171,12 @@ class MasterService {
           `${CONSTANTS.TABLES.ROLE}.id`,
           "=",
           `${CONSTANTS.TABLES.MASTER}.role_id`,
+        )
+        .leftJoin(
+          `${CONSTANTS.TABLES.MASTER} as creator`,
+          "creator.id",
+          "=",
+          "master.created_by",
         );
 
       // if (role !== ROLES_NAME.SUPER_ADMIN) {
@@ -205,6 +212,12 @@ class MasterService {
           `${CONSTANTS.TABLES.ROLE}.id`,
           "=",
           `${CONSTANTS.TABLES.MASTER}.role_id`,
+        )
+        .leftJoin(
+          `${CONSTANTS.TABLES.MASTER} as creator`,
+          "creator.id",
+          "=",
+          "master.created_by",
         )
         .first();
 
