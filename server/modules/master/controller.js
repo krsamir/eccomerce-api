@@ -242,7 +242,7 @@ class MasterController {
     try {
       logger.info(`MasterController.getAllUsersList called :`);
       const data = await MasterService.getAllUsersList({
-        role: req.role,
+        role,
       });
       return res.status(RESPONSE_STATUS.OK_200).send({
         message: "",
@@ -283,7 +283,7 @@ class MasterController {
     try {
       logger.info(`MasterController.getAllRoles called :`);
       const data = await MasterService.getAllRoles({
-        role: req.role,
+        role,
       });
       return res.status(RESPONSE_STATUS.OK_200).send({
         message: "",
