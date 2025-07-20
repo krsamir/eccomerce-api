@@ -15,6 +15,7 @@ tags:
   - name: MASTER
   - name: LOCATION
   - name: ENTITIES
+  - name: ROLES
 paths:
   /api/master/forgot-password:
     post:
@@ -51,6 +52,16 @@ paths:
           description: Successful response
           content:
             application/json: {}
+  /api/master/user-id/d69d2bce-ad9a-4685-b391-ea6dcbf133b0:
+    get:
+      tags:
+        - MASTER
+      summary: USER BY ID
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json: {}
   /api/master/login:
     post:
       tags:
@@ -82,6 +93,16 @@ paths:
               example:
                 email: samirkumar2527@gmail.com
                 password: admin
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json: {}
+  /api/master:
+    get:
+      tags:
+        - MASTER
+      summary: GET ALL MASTER DATA
       responses:
         "200":
           description: Successful response
@@ -237,6 +258,16 @@ paths:
       tags:
         - ENTITIES
       summary: GET ENTITY BY LOCATION ID
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json: {}
+  /api/master/roles:
+    get:
+      tags:
+        - ROLES
+      summary: GET ALL ROLES
       responses:
         "200":
           description: Successful response

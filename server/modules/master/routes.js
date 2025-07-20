@@ -23,7 +23,7 @@ export default express
   .get(
     "/roles",
     isAuthenticated,
-    CAPABILITY([ROLES_NAME.SUPER_ADMIN]),
+    CAPABILITY([ROLES_NAME.SUPER_ADMIN, ROLES_NAME.ADMIN]),
     Controller.getAllRoles.bind(Controller),
   )
   .post(

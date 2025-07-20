@@ -1,10 +1,5 @@
 import { fileURLToPath } from "url";
-import {
-  ENVIRONMENT,
-  logger as logs,
-  CONSTANTS,
-  TRANSFORMERS,
-} from "@ecom/utils";
+import { ENVIRONMENT, logger as logs, CONSTANTS } from "@ecom/utils";
 import knex from "../knexClient.js";
 import { inspect } from "util";
 import { ROLES_NAME } from "@ecom/utils/Constants.js";
@@ -184,7 +179,7 @@ class MasterService {
       //   });
       // }
 
-      baseQuery.orderBy(`${CONSTANTS.TABLES.MASTER}.created_at`, "desc");
+      baseQuery.orderBy(`${CONSTANTS.TABLES.MASTER}.email`, "asc");
 
       return baseQuery;
     } catch (error) {

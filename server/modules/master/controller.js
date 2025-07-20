@@ -260,12 +260,10 @@ class MasterController {
 
   async getUserById(req, res) {
     const { role } = req;
-
-    console.log("🚀 ~ MasterController ~ getUserById ~ role:", role);
     try {
       logger.info(`MasterController.getUserById called :`);
       const data = await MasterService.getUserById({
-        role: req.role,
+        role: role,
         id: req?.params?.id,
       });
       return res.status(RESPONSE_STATUS.OK_200).send({
