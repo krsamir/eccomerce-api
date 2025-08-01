@@ -1,0 +1,483 @@
+{
+  "info": {
+    "_postman_id": "ad553758-47a7-480d-bd7d-eec40278675b",
+    "name": "ECOM",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "12352427"
+  },
+  "item": [
+    {
+      "name": "MASTER",
+      "item": [
+        {
+          "name": "FORGOT PASSWORD",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"email\":\"samirkumar2527@gmail.com\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{url}}/api/master/forgot-password",
+              "host": ["{{url}}"],
+              "path": ["api", "master", "forgot-password"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "VERIFICATION",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"email\": \"samirkumar2527@gmail.com\",\n    \"token\": \"627166\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{url}}/api/master/verification",
+              "host": ["{{url}}"],
+              "path": ["api", "master", "verification"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "USER BY ID",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"email\": \"samirkumar2527@gmail.com\",\n    \"token\": \"627166\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{url}}/api/master/user-id/d69d2bce-ad9a-4685-b391-ea6dcbf133b0",
+              "host": ["{{url}}"],
+              "path": [
+                "api",
+                "master",
+                "user-id",
+                "d69d2bce-ad9a-4685-b391-ea6dcbf133b0"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "LOGIN",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if(pm.response.json().status === 1){",
+                  "    pm.environment.set(\"token\",pm.response.json().token)",
+                  "}"
+                ],
+                "type": "text/javascript",
+                "packages": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"userName\":\"admin\",\n    \"password\": \"admin\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{url}}/api/master/login",
+              "host": ["{{url}}"],
+              "path": ["api", "master", "login"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "SET PASSWORD",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"email\": \"samirkumar2527@gmail.com\",\n    \"password\": \"admin\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{url}}/api/master/set-password",
+              "host": ["{{url}}"],
+              "path": ["api", "master", "set-password"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "GET ALL MASTER DATA",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{url}}/api/master",
+              "host": ["{{url}}"],
+              "path": ["api", "master"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "CREATE MASTER USER",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"userName\":\"admin2\",\n    \"email\": \"admin2@gmail.com\",\n    \"firstName\": \"admin\",\n    \"lastName\": \"admin\",\n    \"mobile\": \"7079583248\",\n    \"roles\": \"071e921d-d08f-4d7f-84a9-c00d4409d774\",\n    \"isActive\": 1,\n    \"isDeleted\": 0\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{url}}/api/master/",
+              "host": ["{{url}}"],
+              "path": ["api", "master", ""]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "UPDATE MASTER USER",
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"id\": \"e2fe259d-8cda-44c7-a7a9-9339c2c6805f\",\n    \"userName\": \"admin2\",\n    \"email\": \"admin2@gmail.com\",\n    \"firstName\": \"admin\",\n    \"lastName\": \"admin\",\n    \"mobile\": \"7079583248\",\n    \"roles\": \"071e921d-d08f-4d7f-84a9-c00d4409d774\",\n    \"isActive\": 1,\n    \"isDeleted\": 0\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{url}}/api/master/",
+              "host": ["{{url}}"],
+              "path": ["api", "master", ""]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "CHECK IF USER EXISTS",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"type\":\"email\",\n    \"value\": \"samirkumar2527@gmail.com\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{url}}/api/master/check-if-exists",
+              "host": ["{{url}}"],
+              "path": ["api", "master", "check-if-exists"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "LOCATION",
+      "item": [
+        {
+          "name": "GET LOCATION",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{url}}/api/location",
+              "host": ["{{url}}"],
+              "path": ["api", "location"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "DELETE LOCATION",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{url}}/api/location?id=d0bc643a-7512-47b0-a4b2-4a609df2e223",
+              "host": ["{{url}}"],
+              "path": ["api", "location"],
+              "query": [
+                {
+                  "key": "id",
+                  "value": "d0bc643a-7512-47b0-a4b2-4a609df2e223"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "CREATE LOCATION",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"name\": \"T1\",\r\n    \"city\": \"Buxar\",\r\n    \"state\": \"Bihar\",\r\n    \"country\": \"Bharat\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{url}}/api/location",
+              "host": ["{{url}}"],
+              "path": ["api", "location"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "UPDATE LOCATION",
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"id\": \"d0bc643a-7512-47b0-a4b2-4a609df2e223\",\r\n    \"name\": \"Dumri5\",\r\n    \"city\": \"Buxar\",\r\n    \"state\": \"Bihar\",\r\n    \"country\": \"Bharat\",\r\n    \"delete\": false\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{url}}/api/location",
+              "host": ["{{url}}"],
+              "path": ["api", "location"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "ENTITIES",
+      "item": [
+        {
+          "name": "GET ALL ENTITIES",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{url}}/api/entity",
+              "host": ["{{url}}"],
+              "path": ["api", "entity"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "GET ENTITY BY ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{url}}/api/entity/4ba3eaca-a83d-4bf6-bbc2-0a263b7a65f0",
+              "host": ["{{url}}"],
+              "path": ["api", "entity", "4ba3eaca-a83d-4bf6-bbc2-0a263b7a65f0"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "GET ENTITY BY LOCATION ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{url}}/api/entity/location/92dd3112-e37c-425b-a588-d60b55a5e0de",
+              "host": ["{{url}}"],
+              "path": [
+                "api",
+                "entity",
+                "location",
+                "92dd3112-e37c-425b-a588-d60b55a5e0de"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "CREATE ENTITY",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"name\": \"Bharat Prasad General Store\",\r\n    \"gst\": \"10DKQPP6909G1ZX\",\r\n    \"address\": \"Dumri, Buxar, Bihar\",\r\n    \"location_id\": \"92dd3112-e37c-425b-a588-d60b55a5e0de\",\r\n    \"proprietor_name\": \"Ashok Prasad\",\r\n    \"categories\": [\r\n        \"Grocery\",\r\n        \"Cosmetics\"\r\n    ]\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{url}}/api/entity",
+              "host": ["{{url}}"],
+              "path": ["api", "entity"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "UPDATE ENTITY",
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"name\": \"TEST\",\r\n    \"gst\": \"TEST\",\r\n    \"address\": \"TEST\",\r\n    \"location_id\": \"92dd3112-e37c-425b-a588-d60b55a5e0de\",\r\n    \"proprietor_name\": \"TEST\",\r\n    \"categories\": [\r\n        \"Grocery\",\r\n        \"Cosmetics\",\r\n        \"ELECTRICAL\"\r\n    ],\r\n    \"is_active\": true,\r\n    \"max_admin\": 5,\r\n    \"max_manager\": 7,\r\n    \"delete\": false\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{url}}/api/entity/4ba3eaca-a83d-4bf6-bbc2-0a263b7a65f0",
+              "host": ["{{url}}"],
+              "path": ["api", "entity", "4ba3eaca-a83d-4bf6-bbc2-0a263b7a65f0"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "DELETE ENTITY",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{url}}/api/entity/4ba3eaca-a83d-4bf6-bbc2-0a263b7a65f0",
+              "host": ["{{url}}"],
+              "path": ["api", "entity", "4ba3eaca-a83d-4bf6-bbc2-0a263b7a65f0"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "ROLES",
+      "item": [
+        {
+          "name": "GET ALL ROLES",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"email\": \"samirkumar2527@gmail.com\",\n    \"token\": \"627166\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{url}}/api/master/roles",
+              "host": ["{{url}}"],
+              "path": ["api", "master", "roles"]
+            }
+          },
+          "response": []
+        }
+      ]
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{token}}",
+        "type": "string"
+      }
+    ]
+  },
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "packages": {},
+        "exec": [""]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "packages": {},
+        "exec": [""]
+      }
+    }
+  ]
+}

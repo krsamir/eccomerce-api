@@ -108,6 +108,72 @@ paths:
           description: Successful response
           content:
             application/json: {}
+  /api/master/:
+    post:
+      tags:
+        - MASTER
+      summary: CREATE MASTER USER
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                userName: admin2
+                email: admin2@gmail.com
+                firstName: admin
+                lastName: admin
+                mobile: "7079583248"
+                roles: 071e921d-d08f-4d7f-84a9-c00d4409d774
+                isActive: 1
+                isDeleted: 0
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json: {}
+    patch:
+      tags:
+        - MASTER
+      summary: UPDATE MASTER USER
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                id: e2fe259d-8cda-44c7-a7a9-9339c2c6805f
+                userName: admin2
+                email: admin2@gmail.com
+                firstName: admin
+                lastName: admin
+                mobile: "7079583248"
+                roles: 071e921d-d08f-4d7f-84a9-c00d4409d774
+                isActive: 1
+                isDeleted: 0
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json: {}
+  /api/master/check-if-exists:
+    post:
+      tags:
+        - MASTER
+      summary: CHECK IF USER EXISTS
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                type: email
+                value: samirkumar2527@gmail.com
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json: {}
   /api/location:
     get:
       tags:
