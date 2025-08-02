@@ -60,6 +60,7 @@ class SchemaValidator {
         roles: Joi.string().optional(),
         isActive: Joi.number().required(),
         isDeleted: Joi.number().required(),
+        entityId: Joi.string().required(),
       }),
     };
   }
@@ -76,6 +77,7 @@ class SchemaValidator {
         roles: Joi.string().optional().allow("").allow(null),
         isActive: Joi.number().optional().allow(null),
         isDeleted: Joi.number().optional().allow(null),
+        entityId: Joi.string().optional(),
       }),
     };
   }

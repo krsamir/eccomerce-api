@@ -17,6 +17,7 @@ const GET_MASTER_SUPER_ADMIN = [
   "role.id as role_id",
   "role.name as role_name",
   "creator.email as created_by_user",
+  "mapper.entity_id as entity_id",
 ];
 
 const GET_ROLES_SUPER_ADMIN = ["*"];
@@ -160,22 +161,32 @@ class MasterService {
     }
   }
 
-  async getAllUsersList({ role }) {
-    let returning = GET_MASTER_SUPER_ADMIN;
-    if (role === ROLES_NAME.SUPER_ADMIN) {
-      returning = GET_MASTER_SUPER_ADMIN;
-    }
+  async getAllUsersList() {
+    const returning = [...GET_MASTER_SUPER_ADMIN];
+    returning.push("entity.name as entity_name");
     try {
       logger.info(`MasterService.getAllUsersList called :`);
       let baseQuery = knex(
         `${ENVIRONMENT.KNEX_SCHEMA}.${CONSTANTS.TABLES.MASTER}`,
       )
         .select(returning)
-        .join(
+        .leftJoin(
           CONSTANTS.TABLES.ROLE,
           `${CONSTANTS.TABLES.ROLE}.id`,
           "=",
           `${CONSTANTS.TABLES.MASTER}.role_id`,
+        )
+        .leftJoin(
+          `${CONSTANTS.TABLES.MASTER_ENTITY_MAPPER} as mapper`,
+          "mapper.master_id",
+          "=",
+          "master.id",
+        )
+        .leftJoin(
+          `${CONSTANTS.TABLES.ENTITY} as entity`,
+          "entity.id",
+          "=",
+          "mapper.entity_id",
         )
         .leftJoin(
           `${CONSTANTS.TABLES.MASTER} as creator`,
@@ -217,6 +228,12 @@ class MasterService {
           `${CONSTANTS.TABLES.ROLE}.id`,
           "=",
           `${CONSTANTS.TABLES.MASTER}.role_id`,
+        )
+        .leftJoin(
+          `${CONSTANTS.TABLES.MASTER_ENTITY_MAPPER} as mapper`,
+          "mapper.master_id",
+          "=",
+          "master.id",
         )
         .leftJoin(
           `${CONSTANTS.TABLES.MASTER} as creator`,
@@ -272,23 +289,23 @@ class MasterService {
     }
   }
 
-  async createMasterUser({ ...user }) {
+  async createMasterUser({ trx, ...user }) {
     try {
       logger.info(`MasterService.createMasterUser called :`);
-      return knex(
-        `${ENVIRONMENT.KNEX_SCHEMA}.${CONSTANTS.TABLES.MASTER}`,
-      ).insert({
-        id: user.id,
-        user_name: user.user_name,
-        email: user.email,
-        first_name: user.first_name,
-        last_name: user.last_name,
-        mobile: user.mobile,
-        role_id: user.roles,
-        is_active: user.is_active,
-        is_deleted: user.is_deleted,
-        created_by: user?.created_by,
-      });
+      return knex(`${ENVIRONMENT.KNEX_SCHEMA}.${CONSTANTS.TABLES.MASTER}`)
+        .insert({
+          id: user.id,
+          user_name: user.user_name,
+          email: user.email,
+          first_name: user.first_name,
+          last_name: user.last_name,
+          mobile: user.mobile,
+          role_id: user.roles,
+          is_active: user.is_active,
+          is_deleted: user.is_deleted,
+          created_by: user?.created_by,
+        })
+        .transacting(trx);
     } catch (error) {
       logger.error(
         `MasterService.createMasterUser: Error occurred :${inspect(error)}`,
@@ -297,18 +314,44 @@ class MasterService {
     }
   }
 
-  async updateMasterUser({ id, ...user }) {
-    delete user.roles;
+  async updateMasterUser({ id, trx, ...user }) {
+    console.log("🚀 ~ MasterService ~ updateMasterUser ~ user:", user);
     try {
       logger.info(`MasterService.updateMasterUser called :`);
       return knex(`${ENVIRONMENT.KNEX_SCHEMA}.${CONSTANTS.TABLES.MASTER}`)
         .update({
           ...user,
         })
-        .where({ id });
+        .where({ id })
+        .transacting(trx);
     } catch (error) {
       logger.error(
         `MasterService.updateMasterUser: Error occurred :${inspect(error)}`,
+      );
+      throw error;
+    }
+  }
+
+  async updateEntityMaster({ id, entity_id, created_by, trx }) {
+    try {
+      logger.info(`MasterService.updateEntityMaster called :`);
+      return knex
+        .from(
+          `${ENVIRONMENT.KNEX_SCHEMA}.${CONSTANTS.TABLES.MASTER_ENTITY_MAPPER}`,
+        )
+        .insert({
+          master_id: id,
+          entity_id,
+          created_by,
+        })
+        .onConflict(["master_id"])
+        .merge({
+          entity_id,
+        })
+        .transacting(trx);
+    } catch (error) {
+      logger.error(
+        `MasterService.updateEntityMaster: Error occurred :${inspect(error)}`,
       );
       throw error;
     }

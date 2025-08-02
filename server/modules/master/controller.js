@@ -317,7 +317,8 @@ class MasterController {
   }
 
   async createMasterUser(req, res) {
-    const { ...userDetail } = req.body;
+    const { entity_id, ...userDetail } = req.body;
+    const trx = await knex.transaction();
     try {
       logger.info(`MasterController.createMasterUser called :`);
       const id = crypto.randomUUID();
@@ -325,13 +326,22 @@ class MasterController {
         ...userDetail,
         id,
         created_by: req?.id,
+        trx,
       });
+      await MasterService.updateEntityMaster({
+        id,
+        entity_id,
+        created_by: req.id,
+        trx,
+      });
+      trx.commit();
       return res.status(RESPONSE_STATUS.OK_200).send({
         message: "User Created",
         status: CONSTANTS.STATUS.SUCCESS,
         data: { id },
       });
     } catch (error) {
+      trx.rollback();
       logger.error(
         `MasterController.createMasterUser: Error occurred : ${inspect(error)}`,
       );
@@ -340,19 +350,66 @@ class MasterController {
   }
 
   async updateMasterUser(req, res) {
-    const { ...userDetail } = req.body;
+    const { entity_id, ...userDetail } = req.body;
+    if (userDetail?.roles) {
+      userDetail.role_id = userDetail.roles;
+      delete userDetail.roles;
+    }
+    const trx = await knex.transaction();
     try {
       logger.info(`MasterController.updateMasterUser called :`);
-      const data = await MasterService.updateMasterUser({
-        ...userDetail,
-        role_id: userDetail.roles,
-      });
+      // id will always be present, hence length should be greater than 1.
+      const isMasterTableUpdateRequired =
+        Object.entries(userDetail)?.length > 1;
+      const isEntityTableUpdateRequired = !!entity_id;
 
-      return res.status(RESPONSE_STATUS.OK_200).send({
-        message: data === 1 ? "User Updated" : "Unable to update user",
-        status: CONSTANTS.STATUS.SUCCESS,
-      });
+      if (isMasterTableUpdateRequired && isEntityTableUpdateRequired) {
+        const data = await MasterService.updateMasterUser({
+          ...userDetail,
+          trx,
+        });
+
+        await MasterService.updateEntityMaster({
+          id: userDetail?.id,
+          entity_id,
+          created_by: req.id,
+          trx,
+        });
+        trx?.commit();
+
+        return res.status(RESPONSE_STATUS.OK_200).send({
+          message: data === 1 ? "User Updated" : "Unable to update user",
+          status: CONSTANTS.STATUS.SUCCESS,
+        });
+      }
+
+      if (isMasterTableUpdateRequired) {
+        const data = await MasterService.updateMasterUser({
+          ...userDetail,
+          trx,
+        });
+        trx?.commit();
+        return res.status(RESPONSE_STATUS.OK_200).send({
+          message: data === 1 ? "User Updated" : "Unable to update user",
+          status: CONSTANTS.STATUS.SUCCESS,
+        });
+      }
+
+      if (isEntityTableUpdateRequired) {
+        await MasterService.updateEntityMaster({
+          id: userDetail?.id,
+          entity_id,
+          created_by: req.id,
+          trx,
+        });
+        trx?.commit();
+        return res.status(RESPONSE_STATUS.OK_200).send({
+          message: "User Updated successfully.",
+          status: CONSTANTS.STATUS.SUCCESS,
+        });
+      }
     } catch (error) {
+      trx?.rollback();
       logger.error(
         `MasterController.updateMasterUser: Error occurred : ${inspect(error)}`,
       );
