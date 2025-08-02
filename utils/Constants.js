@@ -69,6 +69,12 @@ const ROLES = [
   },
 ];
 
+const ROLES_MAP = new Map();
+ROLES.map(({ id, name }) => ROLES_MAP.set(id, name));
+
+const ROLES_ID_MAP_BY_NAME = new Map();
+ROLES.map(({ id, name }) => ROLES_ID_MAP_BY_NAME.set(name, id));
+
 const ROLES_NAME = {
   SUPER_ADMIN: "SUPER_ADMIN",
   ADMIN: "ADMIN",
@@ -77,4 +83,11 @@ const ROLES_NAME = {
   USER: "USER",
 };
 
-export { CONSTANTS, RESPONSE_STATUS, ROLES_NAME, ROLES };
+export {
+  CONSTANTS,
+  RESPONSE_STATUS,
+  ROLES_NAME,
+  ROLES,
+  ROLES_MAP,
+  ROLES_ID_MAP_BY_NAME,
+};
