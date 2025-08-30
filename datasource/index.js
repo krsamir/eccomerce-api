@@ -3,8 +3,9 @@ import {
   MasterService,
   LocationService,
   EntitiesService,
+  UserService,
 } from "./services/index.js";
 
 export default knex;
 
-export { knex, MasterService, LocationService, EntitiesService };
+export { knex, MasterService, LocationService, EntitiesService, UserService };
