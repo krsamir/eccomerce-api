@@ -73,4 +73,5 @@ export default express
     celebrate(validator.checkIfExists()),
     interceptPayloadRequest,
     Controller.checkIfvalueExists.bind(Controller),
-  );
+  )
+  .get("/me", isAuthenticated, Controller.getLoggedInUser.bind(Controller));

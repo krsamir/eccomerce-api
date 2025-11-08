@@ -49,7 +49,7 @@ handlers.forgotPasswordMailHandler = ({
               <body>
                   <div style="line-height: 1.5rem;">
                       <div style="font-size: 18px; font-weight: 600;">Greetings!</div><br>
-                      <div><span>Your secret code ${code}.</span>This code is valid till ${timestamp?.toLocaleString()}.</div>
+                      <div><span>Your secret code <strong>${code}</strong>.</span>This code is valid till ${timestamp?.toLocaleString()}.</div>
                       <a href=${link}>${link}</a><br>
                       <div>Please verify before link/code expires.</div>
                       <div>Happy to see you!</div><br>

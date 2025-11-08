@@ -7,8 +7,8 @@ import { ROLES_NAME } from "@ecom/utils/Constants.js";
 
 export default express
   .Router({ mergeParams: true })
-  .use(isAuthenticated)
   .get("/", Controller.getAllLocations.bind(Controller))
+  .use(isAuthenticated)
   .post(
     "/",
     CAPABILITY([ROLES_NAME.SUPER_ADMIN]),

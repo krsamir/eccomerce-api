@@ -22,6 +22,7 @@ const GET_MASTER_SUPER_ADMIN = [
 
 const GET_ROLES_SUPER_ADMIN = ["*"];
 const GET_ROLES_NON_SUPER_ADMIN = ["name"];
+
 class MasterService {
   async setTokenForEmailAndValidity({ email = "", payload = {}, trx }) {
     try {
@@ -352,6 +353,31 @@ class MasterService {
     } catch (error) {
       logger.error(
         `MasterService.updateEntityMaster: Error occurred :${inspect(error)}`,
+      );
+      throw error;
+    }
+  }
+
+  async getLoggedInUser({ id }) {
+    const returnObj = {
+      id: "id",
+      email: "email",
+      name: knex.raw(`concat(first_name, ' ',  last_name)`),
+      userName: "user_name",
+    };
+    try {
+      logger.info(`MasterService.getLoggedInUser called :`);
+      let baseQuery = knex(
+        `${ENVIRONMENT.KNEX_SCHEMA}.${CONSTANTS.TABLES.MASTER}`,
+      )
+        .select(returnObj)
+        .where({ id })
+        .first();
+
+      return baseQuery;
+    } catch (error) {
+      logger.error(
+        `MasterService.getLoggedInUser: Error occurred :${inspect(error)}`,
       );
       throw error;
     }

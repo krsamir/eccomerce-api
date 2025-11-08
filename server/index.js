@@ -61,7 +61,7 @@ app.use((req, res, next) => {
 app.use((err, req, res, next) => {
   if (err.code === "ER_DUP_ENTRY") {
     return res.status(RESPONSE_STATUS.OK_200).send({
-      message: "This record already exists.",
+      message: "Duplicate entry.",
       status: CONSTANTS.STATUS.FAILURE,
     });
   }

@@ -416,6 +416,24 @@ class MasterController {
       throw error;
     }
   }
+
+  async getLoggedInUser(req, res) {
+    const { id } = req;
+    try {
+      logger.info(`MasterController.getLoggedInUser called :`);
+      const data = await MasterService.getLoggedInUser({ id });
+      return res.status(RESPONSE_STATUS.OK_200).send({
+        message: "",
+        status: CONSTANTS.STATUS.SUCCESS,
+        data: data,
+      });
+    } catch (error) {
+      logger.error(
+        `MasterController.getLoggedInUser: Error occurred : ${inspect(error)}`,
+      );
+      throw error;
+    }
+  }
 }
 
 export default new MasterController();

@@ -38,6 +38,9 @@ const CONSTANTS = Object.freeze({
     NO_OF_INVALID_LOGINS_COUNT: 10,
     PASSWORD_CHANGE_TOKEN: "PCW",
   },
+  TENANT_TYPE: {
+    APP: "APP",
+  },
 });
 
 const RESPONSE_STATUS = Object.freeze({
