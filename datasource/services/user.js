@@ -98,6 +98,21 @@ class UserService {
       throw error;
     }
   }
+
+  async setTokenForEmailAndValidity({ email = "", payload = {}, trx }) {
+    try {
+      logger.info(`UserService.setTokenForEmailAndValidity called :`);
+      return knex(`${ENVIRONMENT.KNEX_SCHEMA}.${CONSTANTS.TABLES.USER}`)
+        .update({ ...payload })
+        .where({ email })
+        .transacting(trx);
+    } catch (error) {
+      logger.error(
+        `UserService.setTokenForEmailAndValidity: Error occurred :${inspect(error)}`,
+      );
+      throw error;
+    }
+  }
 }
 
 export default new UserService();

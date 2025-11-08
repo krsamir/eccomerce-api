@@ -29,4 +29,10 @@ export default express
     celebrate(validator.login()),
     interceptPayloadRequest,
     Controller.login.bind(Controller),
+  )
+  .post(
+    "/reset",
+    celebrate(validator.forgotPassword()),
+    interceptPayloadRequest,
+    Controller.forgotPassword.bind(Controller),
   );
