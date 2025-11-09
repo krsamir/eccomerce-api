@@ -9,7 +9,6 @@ let logger = logs(__filename);
 
 class UserService {
   async registerUser({ trx, ...payload }) {
-    console.log("🚀 ~ UserService ~ registerUser ~ payload:", payload);
     try {
       logger.info(`UserService.registerUser called :`);
       return DataSourceUtilities.rawInsertQuery({

@@ -316,7 +316,6 @@ class MasterService {
   }
 
   async updateMasterUser({ id, trx, ...user }) {
-    console.log("🚀 ~ MasterService ~ updateMasterUser ~ user:", user);
     try {
       logger.info(`MasterService.updateMasterUser called :`);
       return knex(`${ENVIRONMENT.KNEX_SCHEMA}.${CONSTANTS.TABLES.MASTER}`)

@@ -82,8 +82,6 @@ class UserController {
         email,
         token,
       });
-      console.log("🚀 ~ UserController ~ confirmToken ~ data:", data);
-
       return res.status(RESPONSE_STATUS.OK_200).send({
         data: !!data,
         message: data
@@ -167,7 +165,6 @@ class UserController {
             message: "Logged in.",
             status: CONSTANTS.STATUS.SUCCESS,
             token: jwtToken,
-            role: data?.role_id,
           });
         }
         await UserService.setLoginDetails({

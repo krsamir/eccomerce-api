@@ -13,7 +13,6 @@ class DataSourceUtilities {
       return acc + "?,";
     }, "");
     const values = obj.map((val) => val[1]);
-    console.log("🚀 ~ DataSourceUtilities ~ rawInsertQuery ~ values:", values);
 
     if (trx) {
       return trx.raw(
