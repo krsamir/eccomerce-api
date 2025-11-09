@@ -252,6 +252,31 @@ class UserController {
       throw error;
     }
   }
+
+  async getLoggedInUser(req, res) {
+    const { id } = req;
+    try {
+      logger.info(`UserController.getLoggedInUser called :`);
+      const data = await UserService.getLoggedInUser({ id });
+
+      if (data) {
+        return res.status(RESPONSE_STATUS.OK_200).send({
+          message: "",
+          status: CONSTANTS.STATUS.SUCCESS,
+          user: data,
+        });
+      } else {
+        return res.status(RESPONSE_STATUS.NOT_FOUND_404).send({
+          message: "",
+          status: CONSTANTS.STATUS.FAILURE,
+        });
+      }
+    } catch (error) {
+      logger.error(`
+        UserController.getLoggedInUser: Error occurred : ${inspect(error)}`);
+      throw error;
+    }
+  }
 }
 
 export default new UserController();

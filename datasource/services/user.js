@@ -112,6 +112,30 @@ class UserService {
       throw error;
     }
   }
+
+  async getLoggedInUser({ id }) {
+    const returnObj = {
+      id: "id",
+      email: "email",
+      name: knex.raw(`concat(first_name, ' ',  last_name)`),
+      userName: "user_name",
+      mobile: "mobile",
+    };
+    try {
+      logger.info(`UserService.getLoggedInUser called :`);
+      return knex(`${ENVIRONMENT.KNEX_SCHEMA}.${CONSTANTS.TABLES.USER}`)
+        .select(returnObj)
+        .where({
+          id,
+          is_active: true,
+        })
+        .first();
+    } catch (error) {
+      logger.error(`
+        UserService.getLoggedInUser: Error occurred : ${inspect(error)}`);
+      throw error;
+    }
+  }
 }
 
 export default new UserService();
