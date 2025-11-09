@@ -199,6 +199,7 @@ class MasterController {
               user_name: data.user_name,
               role_id: data?.role_id,
               role: data?.role_name,
+              entityId: data?.entity_id,
             },
             ENVIRONMENT.JWT_SECRET,
             {

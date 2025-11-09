@@ -18,6 +18,7 @@ export const checkIsAuthenticatedHandler = (req) => {
     req.user_name = decoded?.user_name;
     req.role_id = decoded?.role_id;
     req.role = decoded?.role;
+    req.entityId = decoded?.entityId;
     return true;
   } catch (error) {
     logger.error(inspect(error));

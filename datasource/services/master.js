@@ -129,6 +129,7 @@ class MasterService {
           "invalid_logins",
           "role_id",
           "role.name as role_name",
+          "entity.entity_id",
         ])
         .where({
           is_active: true,
@@ -137,7 +138,12 @@ class MasterService {
         .andWhere({ user_name })
         .orWhere({ email })
         .first()
-        .join("role as role", "role.id", "master.role_id");
+        .join("role as role", "role.id", "master.role_id")
+        .join(
+          "master_entity_mapper as entity",
+          "master.id",
+          "entity.master_id",
+        );
     } catch (error) {
       logger.error(
         `MasterService.getUserByEmail: Error occurred :${inspect(error)}`,
@@ -359,19 +365,25 @@ class MasterService {
 
   async getLoggedInUser({ id }) {
     const returnObj = {
-      id: "id",
+      id: "master.id",
       email: "email",
       name: knex.raw(`concat(first_name, ' ',  last_name)`),
       userName: "user_name",
+      entityId: "entity.entity_id",
     };
     try {
       logger.info(`MasterService.getLoggedInUser called :`);
       let baseQuery = knex(
-        `${ENVIRONMENT.KNEX_SCHEMA}.${CONSTANTS.TABLES.MASTER}`,
+        `${ENVIRONMENT.KNEX_SCHEMA}.${CONSTANTS.TABLES.MASTER} as master`,
       )
         .select(returnObj)
-        .where({ id })
-        .first();
+        .where({ "master.id": id })
+        .first()
+        .join(
+          "master_entity_mapper as entity",
+          "master.id",
+          "entity.master_id",
+        );
 
       return baseQuery;
     } catch (error) {
