@@ -31,6 +31,9 @@ const CONSTANTS = Object.freeze({
     MASTER_ENTITY_MAPPER: "master_entity_mapper",
     ROLE: "role",
     USER: "user",
+    HSNS: "hsns",
+    UNITS: "units",
+    PRODUCTS: "products",
   },
   AUTHENTICATION: {
     TOKEN_VALIDITY_IN_MINS: 10,

@@ -14,6 +14,7 @@ const ENVIRONMENT = Object.freeze({
   KNEX_HOST: process.env.KNEX_HOST,
   KNEX_PASSWORD: process.env.KNEX_PASSWORD,
   KNEX_SCHEMA: process.env.KNEX_SCHEMA,
+  KNEX_DATABASE: process.env.KNEX_DATABASE,
   KNEX_CLIENT: process.env.KNEX_CLIENT,
   SENDER: process.env.SENDER,
   MAIL_PASSWORD: process.env.MAIL_PASSWORD,

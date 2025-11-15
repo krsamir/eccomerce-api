@@ -139,7 +139,7 @@ class MasterService {
         .orWhere({ email })
         .first()
         .join("role as role", "role.id", "master.role_id")
-        .join(
+        .leftJoin(
           "master_entity_mapper as entity",
           "master.id",
           "entity.master_id",
