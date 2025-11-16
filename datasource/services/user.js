@@ -2,7 +2,6 @@ import { fileURLToPath } from "url";
 import { ENVIRONMENT, logger as logs, CONSTANTS } from "@ecom/utils";
 import knex from "../knexClient.js";
 import { inspect } from "util";
-import DataSourceUtilities from "../utils/rawQueries.js";
 
 const __filename = fileURLToPath(import.meta.url);
 let logger = logs(__filename);
@@ -11,11 +10,10 @@ class UserService {
   async registerUser({ trx, ...payload }) {
     try {
       logger.info(`UserService.registerUser called :`);
-      return DataSourceUtilities.rawInsertQuery({
-        tableName: `${ENVIRONMENT.KNEX_SCHEMA}.${CONSTANTS.TABLES.USER}`,
-        payload,
-        trx,
-      });
+      return knex(`${ENVIRONMENT.KNEX_SCHEMA}.${CONSTANTS.TABLES.USER}`)
+        .insert(payload)
+        .returning("*")
+        .transacting(trx);
     } catch (error) {
       logger.error(`
         UserService.registerUser: Error occurred : ${inspect(error)}`);
@@ -50,7 +48,7 @@ class UserService {
           token: null,
           valid_till: null,
           is_active: true,
-          invalid_logins: true,
+          invalid_logins: 10,
         })
         .where({
           email,

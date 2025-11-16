@@ -30,7 +30,7 @@ class UserController {
         now.getTime() +
           CONSTANTS.AUTHENTICATION.TOKEN_VALIDITY_IN_MINS * 60 * 1000,
       );
-      const [data] = await UserService.registerUser({
+      const data = await UserService.registerUser({
         ...user,
         id: crypto.randomUUID(),
         token,
@@ -52,7 +52,7 @@ class UserController {
           },
         });
       }
-      if (data.affectedRows > 0) {
+      if (data?.length > 0 && data[0].id) {
         trx.commit();
         return res.status(RESPONSE_STATUS.OK_200).send({
           message:
