@@ -34,6 +34,7 @@ const CONSTANTS = Object.freeze({
     HSNS: "hsns",
     UNITS: "units",
     PRODUCTS: "products",
+    TEMPLATES: "templates",
   },
   AUTHENTICATION: {
     TOKEN_VALIDITY_IN_MINS: 10,

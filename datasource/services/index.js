@@ -5,6 +5,7 @@ import UserService from "./user.js";
 import ProductService from "./products.js";
 import HSNService from "./hsns.js";
 import UnitService from "./units.js";
+import TemplatesService from "./templates.js";
 
 export {
   MasterService,
@@ -14,4 +15,5 @@ export {
   ProductService,
   HSNService,
   UnitService,
+  TemplatesService,
 };

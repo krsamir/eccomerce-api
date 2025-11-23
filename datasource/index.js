@@ -9,6 +9,7 @@ export {
   ProductService,
   HSNService,
   UnitService,
+  TemplatesService,
 } from "./services/index.js";
 
 export { DataSourceUtilities };
