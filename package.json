@@ -8,7 +8,8 @@
     "utils",
     "server",
     "datasource",
-    "mail"
+    "mail",
+    "models"
   ],
   "scripts": {
     "start": "node server/index.js",

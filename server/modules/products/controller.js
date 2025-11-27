@@ -11,9 +11,14 @@ import { ProductService } from "@ecom/datasource";
 import { inspect } from "util";
 // import knex from "@ecom/datasource";
 import { fileURLToPath } from "url";
+import { Product } from "@ecom/models";
 
 const __filename = fileURLToPath(import.meta.url);
 let logger = logs(__filename);
+
+const product = new Product({});
+
+console.log("🚀 ~ product:", product.get());
 
 class ProductController {
   async getHsnByNameAndCode(req, res) {
