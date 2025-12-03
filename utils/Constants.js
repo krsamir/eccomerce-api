@@ -35,6 +35,11 @@ const CONSTANTS = Object.freeze({
     UNITS: "units",
     PRODUCTS: "products",
     TEMPLATES: "templates",
+    COSTS: "costs",
+    COSTS_DRAFT: "costs_draft",
+    STOCKS: "stocks",
+    STOCKS_DRAFT: "stocks_draft",
+    PRODUCTS_DRAFT: "products_draft",
   },
   AUTHENTICATION: {
     TOKEN_VALIDITY_IN_MINS: 10,
