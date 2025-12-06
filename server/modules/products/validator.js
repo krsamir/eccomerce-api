@@ -37,8 +37,19 @@ class SchemaValidator {
 
   getProductById() {
     return {
-      [Segments.QUERY]: Joi.object({
+      [Segments.PARAMS]: Joi.object({
         id: Joi.string().required(),
+      }),
+    };
+  }
+
+  getAllProducts() {
+    return {
+      [Segments.QUERY]: Joi.object({
+        page: Joi.number().optional().min(1).default(1),
+      }),
+      [Segments.BODY]: Joi.object({
+        filter: Joi.any().optional(),
       }),
     };
   }

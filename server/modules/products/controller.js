@@ -64,7 +64,7 @@ class ProductController {
   }
 
   async getProductById(req, res) {
-    const { id } = req.query;
+    const { id } = req.params;
     try {
       logger.info(`ProductController.getProductById called :`);
       const data = await ProductService.getProductById({ id });
@@ -76,6 +76,44 @@ class ProductController {
     } catch (error) {
       logger.error(`
         ProductController.getProductById: Error occurred : ${inspect(error)}`);
+      throw error;
+    }
+  }
+  async getAllProducts(req, res) {
+    const { page } = req.query;
+    const { filter } = req.body;
+    try {
+      logger.info(`ProductController.getAllProducts called :`);
+      const data = await ProductService.getAllProducts({ page, filter });
+      return res.status(RESPONSE_STATUS.OK_200).send({
+        message: "",
+        status: CONSTANTS.STATUS.SUCCESS,
+        data,
+      });
+    } catch (error) {
+      logger.error(`
+        ProductController.getAllProducts: Error occurred : ${inspect(error)}`);
+      throw error;
+    }
+  }
+
+  async getAllProductMetaData(req, res) {
+    try {
+      logger.info(`ProductController.getAllProductMetaData called :`);
+      let count = 0;
+      const data = await ProductService.getAllProductMetaData();
+      if (data?.[0]?.count) {
+        count = Number(data?.[0]?.count);
+      }
+
+      return res.status(RESPONSE_STATUS.OK_200).send({
+        message: "",
+        status: CONSTANTS.STATUS.SUCCESS,
+        data: count,
+      });
+    } catch (error) {
+      logger.error(`
+        ProductController.getAllProductMetaData: Error occurred : ${inspect(error)}`);
       throw error;
     }
   }

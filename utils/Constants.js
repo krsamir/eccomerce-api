@@ -50,6 +50,7 @@ const CONSTANTS = Object.freeze({
   TENANT_TYPE: {
     APP: "APP",
   },
+  PER_PAGE_NUMBER_OF_ROWS: 10,
 });
 
 const RESPONSE_STATUS = Object.freeze({

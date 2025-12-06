@@ -1,4 +1,9 @@
-import { ENVIRONMENT, logger as logs, CONSTANTS } from "@ecom/utils";
+import {
+  ENVIRONMENT,
+  logger as logs,
+  CONSTANTS,
+  toSnakeCase,
+} from "@ecom/utils";
 import knex from "../knexClient.js";
 import { inspect } from "util";
 // import { ROLES_NAME } from "@ecom/utils/Constants.js";
@@ -130,6 +135,64 @@ class ProductService {
     } catch (error) {
       logger.error(`
         ProductService.createProduct: Error occurred : ${inspect(error)}`);
+      throw error;
+    }
+  }
+
+  async getAllProductMetaData() {
+    try {
+      logger.info(`ProductService.getAllProductMetaData called :`);
+      return knex(
+        `${ENVIRONMENT.KNEX_SCHEMA}.${CONSTANTS.TABLES.PRODUCTS_DRAFT}`,
+      ).count();
+    } catch (error) {
+      logger.error(`
+        ProductService.getAllProductMetaData: Error occurred : ${inspect(error)}`);
+      throw error;
+    }
+  }
+
+  async getAllProducts({ page, filter }) {
+    page = Number.isNaN(page) ? 1 : page < 1 ? 1 : page;
+    const offset = (page - 1) * CONSTANTS.PER_PAGE_NUMBER_OF_ROWS;
+    try {
+      logger.info(`ProductService.getAllProducts called :`);
+      const query = knex(
+        `${ENVIRONMENT.KNEX_SCHEMA}.${CONSTANTS.TABLES.PRODUCTS_DRAFT}`,
+      )
+        .select([
+          "barcode",
+          "hindi_name",
+          "is_active",
+          "is_deleted",
+          "name",
+          "unit",
+          "unit_type",
+          "uuid",
+        ])
+        .orderBy("updated_at", "desc")
+        .limit(CONSTANTS.PER_PAGE_NUMBER_OF_ROWS)
+        .offset(offset);
+
+      if (filter.length > 0) {
+        filter.map(({ type, col, value }) => {
+          if (type === "TEXT_FILTER") {
+            if (col === "unit" || col === "uuid") {
+              query.orWhere(toSnakeCase(col), value);
+            } else {
+              query.orWhereILike(toSnakeCase(col), `%${value}%`);
+            }
+          }
+          if (type === "EXACT_MATCH" || type === "BOOLEAN_FILTER") {
+            query.orWhere(toSnakeCase(col), value);
+          }
+        });
+      }
+      console.info(query.toQuery());
+      return query;
+    } catch (error) {
+      logger.error(`
+        ProductService.getAllProducts: Error occurred : ${inspect(error)}`);
       throw error;
     }
   }

@@ -18,6 +18,18 @@ export default express
   .use("/hsn", hsnRoutes)
   .use("/units", unitRoutes)
   .use("/templates", templatesRoutes)
+  .get(
+    "/meta",
+    CAPABILITY([ROLES_NAME.SUPER_ADMIN, ROLES_NAME.ADMIN, ROLES_NAME.MANAGER]),
+    interceptPayloadRequest,
+    Controller.getAllProductMetaData.bind(Controller),
+  )
+  .post(
+    "/all",
+    CAPABILITY([ROLES_NAME.SUPER_ADMIN, ROLES_NAME.ADMIN, ROLES_NAME.MANAGER]),
+    celebrate(validator.getAllProducts()),
+    Controller.getAllProducts.bind(Controller),
+  )
   .post(
     "/",
     CAPABILITY([ROLES_NAME.SUPER_ADMIN, ROLES_NAME.ADMIN, ROLES_NAME.MANAGER]),
@@ -26,15 +38,15 @@ export default express
     Controller.createProduct.bind(Controller),
   )
   .get(
-    "/",
-    CAPABILITY([ROLES_NAME.SUPER_ADMIN, ROLES_NAME.ADMIN, ROLES_NAME.MANAGER]),
-    celebrate(validator.getProductById()),
-    interceptPayloadRequest,
-    Controller.getProductById.bind(Controller),
-  )
-  .get(
     "/stocks-metadata",
     CAPABILITY([ROLES_NAME.SUPER_ADMIN, ROLES_NAME.ADMIN]),
     interceptPayloadRequest,
     Controller.getStocksMetadata.bind(Controller),
+  )
+  .get(
+    "/:id",
+    CAPABILITY([ROLES_NAME.SUPER_ADMIN, ROLES_NAME.ADMIN, ROLES_NAME.MANAGER]),
+    celebrate(validator.getProductById()),
+    interceptPayloadRequest,
+    Controller.getProductById.bind(Controller),
   );
