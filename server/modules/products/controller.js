@@ -68,7 +68,6 @@ class ProductController {
     try {
       logger.info(`ProductController.getProductById called :`);
       const data = await ProductService.getProductById({ id });
-      console.log("🚀 ~ ProductController ~ getProductById ~ data:", data);
       return res.status(RESPONSE_STATUS.OK_200).send({
         message: data ? "" : `Product with ${id} does not exist.`,
         status: data ? CONSTANTS.STATUS.SUCCESS : CONSTANTS.STATUS.FAILURE,
