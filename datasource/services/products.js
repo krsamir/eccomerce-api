@@ -174,7 +174,7 @@ class ProductService {
         .limit(CONSTANTS.PER_PAGE_NUMBER_OF_ROWS)
         .offset(offset);
 
-      if (filter.length > 0) {
+      if (filter?.length > 0) {
         filter.map(({ type, col, value }) => {
           if (type === "TEXT_FILTER") {
             if (col === "unit" || col === "uuid") {

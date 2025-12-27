@@ -13,9 +13,9 @@ import {
   interceptBody,
   RESPONSE_STATUS,
   interceptResponse,
+  CONSTANTS,
 } from "@ecom/utils";
 import cors from "cors";
-import { CONSTANTS } from "@ecom/utils";
 import httpErrors from "http-errors";
 import appRoutes from "./routes.js";
 
@@ -84,7 +84,13 @@ app.use((err, req, res, next) => {
           message: "Internal server error.",
         }
       : { message: "Internal server error.", status: CONSTANTS.STATUS.FAILURE };
-  res.status(RESPONSE_STATUS.INTERNAL_SERVER_ERROR_500).send(error);
+
+  const STATUS =
+    err.name === "NotFoundError"
+      ? RESPONSE_STATUS.NOT_FOUND_404
+      : RESPONSE_STATUS.INTERNAL_SERVER_ERROR_500;
+
+  res.status(STATUS).send(error);
 });
 
 // app.use(cors({ exposedHeaders: [CONSTANTS.HEADERS.COORELATION_ID] }));
