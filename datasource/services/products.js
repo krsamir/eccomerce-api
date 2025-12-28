@@ -181,10 +181,40 @@ class ProductService {
         await baseCostQuery.insert(costs).returning("*").transacting(trx);
       }
       if (Object.keys(stockPayload ?? {})?.length > 0) {
+        const lastStockOnj = await knex(
+          `${ENVIRONMENT.KNEX_SCHEMA}.${CONSTANTS.TABLES.STOCKS_DRAFT}`,
+        )
+          .select("*")
+          .where({
+            product_id: productId,
+          })
+          .orderBy("created_at", "desc")
+          .first();
+
+        console.info(lastStockOnj);
+        console.info(stockPayload);
+
         await knex(
           `${ENVIRONMENT.KNEX_SCHEMA}.${CONSTANTS.TABLES.STOCKS_DRAFT}`,
         )
-          .insert({ ...stockPayload, ...metadata, product_id: productId })
+          .insert({
+            ...stockPayload,
+            ...metadata,
+            product_id: productId,
+            quantity_available:
+              stockPayload?.quantity_available ||
+              lastStockOnj?.quantity_available ||
+              null,
+            reorder_level:
+              stockPayload?.reorder_level ||
+              lastStockOnj?.reorder_level ||
+              null,
+            supplier_name:
+              stockPayload?.supplier_name ||
+              lastStockOnj?.supplier_name ||
+              null,
+            source: stockPayload?.source || lastStockOnj?.source || null,
+          })
           .returning("*")
           .transacting(trx);
       }
