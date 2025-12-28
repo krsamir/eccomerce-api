@@ -1,15 +1,6 @@
-import {
-  // checkIsAuthenticatedHandler,
-  CONSTANTS,
-  ENVIRONMENT,
-  logger as logs,
-  RESPONSE_STATUS,
-  // TRANSFORMERS,
-  // transformText,
-} from "@ecom/utils";
+import { CONSTANTS, logger as logs, RESPONSE_STATUS } from "@ecom/utils";
 import knex, { ProductService } from "@ecom/datasource";
 import { inspect } from "util";
-// import knex from "@ecom/datasource";
 import { fileURLToPath } from "url";
 
 const __filename = fileURLToPath(import.meta.url);
@@ -59,6 +50,39 @@ class ProductController {
       trx.rollback();
       logger.error(`
         ProductController.createProduct: Error occurred : ${inspect(error)}`);
+      throw error;
+    }
+  }
+
+  async updateProduct(req, res) {
+    const body = req.body;
+    const { entityId, id } = req;
+    const trx = await knex.transaction();
+    try {
+      logger.info(`ProductController.updateProduct called :`);
+      const data = await ProductService.updateProduct({
+        body,
+        entityId,
+        id,
+        trx,
+      });
+      if (data) {
+        trx.commit();
+        return res.status(RESPONSE_STATUS.OK_200).send({
+          message: "Product updated.",
+          status: CONSTANTS.STATUS.SUCCESS,
+        });
+      } else {
+        trx.rollback();
+        return res.status(RESPONSE_STATUS.OK_200).send({
+          message: "Product updated.",
+          status: CONSTANTS.STATUS.SUCCESS,
+        });
+      }
+    } catch (error) {
+      trx.rollback();
+      logger.error(`
+        ProductController.updateProduct: Error occurred : ${inspect(error)}`);
       throw error;
     }
   }

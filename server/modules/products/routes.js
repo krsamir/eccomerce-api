@@ -37,6 +37,13 @@ export default express
     interceptPayloadRequest,
     Controller.createProduct.bind(Controller),
   )
+  .patch(
+    "/",
+    CAPABILITY([ROLES_NAME.SUPER_ADMIN, ROLES_NAME.ADMIN, ROLES_NAME.MANAGER]),
+    celebrate(validator.updateProduct()),
+    interceptPayloadRequest,
+    Controller.updateProduct.bind(Controller),
+  )
   .get(
     "/stocks-metadata",
     CAPABILITY([ROLES_NAME.SUPER_ADMIN, ROLES_NAME.ADMIN]),

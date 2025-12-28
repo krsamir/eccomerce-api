@@ -11,9 +11,10 @@ export const toSnakeCase = (obj) => {
   if (obj instanceof Date) {
     return obj;
   }
-  if (typeof obj === "string") {
-    return obj.replace(/[A-Z]/g, (letter) => `_${letter.toLowerCase()}`);
-  } else if (obj !== null && typeof obj === "object") {
+  // if (typeof obj === "string") {
+  //   return obj.replace(/[A-Z]/g, (letter) => `_${letter.toLowerCase()}`);
+  // }
+  else if (obj !== null && typeof obj === "object") {
     return Object.keys(obj).reduce((acc, key) => {
       const snakeKey = key.replace(
         /[A-Z]/g,

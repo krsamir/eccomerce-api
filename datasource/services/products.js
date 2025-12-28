@@ -139,6 +139,64 @@ class ProductService {
     }
   }
 
+  async updateProduct({ body, entityId, id: reqId, trx }) {
+    let { costs: costsPayload, stock: stockPayload, ...productPayload } = body;
+
+    try {
+      logger.info(`ProductService.updateProduct called :`);
+
+      const metadata = { entity_id: entityId, created_by: reqId };
+
+      const { id, ...payload } = { ...productPayload, updated_by: reqId };
+
+      const isProductKeyAvailable = Object.keys(payload ?? {})?.length > 0;
+
+      let productId = isProductKeyAvailable
+        ? await this.update({
+            payload,
+            where: { uuid: id },
+            returning: ["id"],
+          }).transacting(trx)
+        : await this.get({ where: { uuid: id }, returning: ["id"] });
+
+      const baseCostQuery = knex(
+        `${ENVIRONMENT.KNEX_SCHEMA}.${CONSTANTS.TABLES.COSTS_DRAFT}`,
+      );
+
+      productId = productId?.length ? productId[0]?.id : null;
+
+      let [version] = await baseCostQuery
+        .max("version")
+        .where({ product_id: productId });
+
+      version = version?.max + 1;
+
+      const costs = (costsPayload ?? [])
+        .filter((item) => item?.id?.length <= 0)
+        ?.map((item) => {
+          delete item.id;
+          return { ...item, ...metadata, version, product_id: productId };
+        });
+      if (costs?.length > 0) {
+        await baseCostQuery.insert(costs).returning("*").transacting(trx);
+      }
+      if (Object.keys(stockPayload ?? {})?.length > 0) {
+        await knex(
+          `${ENVIRONMENT.KNEX_SCHEMA}.${CONSTANTS.TABLES.STOCKS_DRAFT}`,
+        )
+          .insert({ ...stockPayload, ...metadata, product_id: productId })
+          .returning("*")
+          .transacting(trx);
+      }
+
+      return true;
+    } catch (error) {
+      logger.error(`
+        ProductService.updateProduct: Error occurred : ${inspect(error)}`);
+      throw error;
+    }
+  }
+
   async getAllProductMetaData() {
     try {
       logger.info(`ProductService.getAllProductMetaData called :`);
