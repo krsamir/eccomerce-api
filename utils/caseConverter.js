@@ -53,6 +53,10 @@ export const toCamelCase = (obj) => {
 export const interceptResponse = (req, res, next) => {
   const originalJson = res.json;
   res.json = function (data) {
+    if (data.keepSnakeCase) {
+      delete data.keepSnakeCase;
+      return originalJson.call(this, data);
+    }
     const camelCaseData = toCamelCase(data);
     if (!camelCaseData.keepSnakeCase) {
       delete camelCaseData.keepSnakeCase;

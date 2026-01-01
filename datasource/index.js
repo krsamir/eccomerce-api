@@ -10,6 +10,7 @@ export {
   HSNService,
   UnitService,
   TemplatesService,
+  MediaService,
 } from "./services/index.js";
 
 export { DataSourceUtilities };

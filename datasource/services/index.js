@@ -6,6 +6,7 @@ import ProductService from "./products.js";
 import HSNService from "./hsns.js";
 import UnitService from "./units.js";
 import TemplatesService from "./templates.js";
+import MediaService from "./media.js";
 
 export {
   MasterService,
@@ -16,4 +17,5 @@ export {
   HSNService,
   UnitService,
   TemplatesService,
+  MediaService,
 };

@@ -3,6 +3,7 @@ const CONSTANTS = Object.freeze({
   AUTHORIZATION: "Authorization",
   HEADERS: {
     COORELATION_ID: "x-correlation-id",
+    M_TOKEN: "m-token",
   },
   ENVIRONMENT: {
     DEVELOPMENT: "development",
@@ -40,6 +41,8 @@ const CONSTANTS = Object.freeze({
     STOCKS: "stocks",
     STOCKS_DRAFT: "stocks_draft",
     PRODUCTS_DRAFT: "products_draft",
+    MEDIA: "media",
+    MEDIA_DRAFT: "media_draft",
   },
   AUTHENTICATION: {
     TOKEN_VALIDITY_IN_MINS: 10,

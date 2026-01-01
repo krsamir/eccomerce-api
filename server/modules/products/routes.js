@@ -11,6 +11,7 @@ import {
 import hsnRoutes from "./hsns/routes.js";
 import unitRoutes from "./units/routes.js";
 import templatesRoutes from "./templates/routes.js";
+import mediaRoutes from "./media/routes.js";
 
 export default express
   .Router({ mergeParams: true })
@@ -18,6 +19,7 @@ export default express
   .use("/hsn", hsnRoutes)
   .use("/units", unitRoutes)
   .use("/templates", templatesRoutes)
+  .use("/media", mediaRoutes)
   .get(
     "/meta",
     CAPABILITY([ROLES_NAME.SUPER_ADMIN, ROLES_NAME.ADMIN, ROLES_NAME.MANAGER]),

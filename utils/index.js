@@ -25,6 +25,7 @@ import {
   transformStringToSnakeCase,
 } from "./caseConverter.js";
 import { cleanseObjectByRemovingFalseValues } from "./helpers.js";
+import axiosInstance from "./axiosHelper.js";
 export {
   coorelation,
   logger,
@@ -48,4 +49,5 @@ export {
   ROLES_MAP,
   ROLES,
   ROLES_ID_MAP_BY_NAME,
+  axiosInstance,
 };

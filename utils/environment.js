@@ -23,6 +23,8 @@ const ENVIRONMENT = Object.freeze({
   SEND_EMAILS: process.env.SEND_EMAILS,
   JWT_SECRET: process.env.JWT_SECRET,
   JWT_EXPIRATION_TIME: process.env.JWT_EXPIRATION_TIME,
+  MEDIA_SERVER_HOST: process.env.MEDIA_SERVER_HOST,
+  MEDIA_SERVICE_TOKEN: process.env.MEDIA_SERVICE_TOKEN,
 });
 
 export default ENVIRONMENT;

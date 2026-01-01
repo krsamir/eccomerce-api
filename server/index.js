@@ -6,6 +6,7 @@ import path from "path";
 import { fileURLToPath } from "url";
 import _ from "util";
 import { errors } from "celebrate";
+import multer from "multer";
 import {
   coorelation,
   logger as logs,
@@ -38,6 +39,7 @@ if (ENVIRONMENT.NODE_ENV === "development") {
 app.use(express.json());
 app.use(coorelation);
 app.use(cors("*"));
+app.use(multer().single("media"));
 app.use(interceptBody);
 app.use(interceptResponse);
 
@@ -65,7 +67,9 @@ app.use((err, req, res, next) => {
       status: CONSTANTS.STATUS.FAILURE,
     });
   }
-  logger.error(`GLOBAL ERROR HANDLER::\n ${_.inspect(err, { depth: 6 })}`);
+  if (!err.isAxiosError) {
+    logger.error(`GLOBAL ERROR HANDLER::\n ${_.inspect(err, { depth: 6 })}`);
+  }
 
   const error =
     ENVIRONMENT.NODE_ENV === CONSTANTS.ENVIRONMENT.DEVELOPMENT

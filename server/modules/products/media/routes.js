@@ -1,8 +1,8 @@
 import express from "express";
 import Controller from "./controller.js";
-import { interceptPayloadRequest, isAuthenticated } from "@ecom/utils";
+import { isAuthenticated } from "@ecom/utils";
 
 export default express
   .Router({ mergeParams: true })
   .use(isAuthenticated)
-  .get("/", interceptPayloadRequest, Controller.getAll.bind(Controller));
+  .post("/", Controller.postMedia.bind(Controller));

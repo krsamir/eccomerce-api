@@ -6,7 +6,6 @@ import {
 } from "@ecom/utils";
 import knex from "../knexClient.js";
 import { inspect } from "util";
-// import { ROLES_NAME } from "@ecom/utils/Constants.js";
 import { fileURLToPath } from "url";
 import { Product } from "@ecom/models";
 
@@ -276,7 +275,6 @@ class ProductService {
           }
         });
       }
-      console.info(query.toQuery());
       return query;
     } catch (error) {
       logger.error(`
