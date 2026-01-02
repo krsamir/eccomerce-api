@@ -11,6 +11,7 @@
   "description": "",
   "dependencies": {
     "@ecom/utils": "*",
+    "ioredis": "^5.8.2",
     "knex": "^3.1.0",
     "pg": "^8.16.3"
   }

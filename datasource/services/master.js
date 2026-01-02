@@ -8,6 +8,7 @@ import {
 import knex from "../knexClient.js";
 import { inspect } from "util";
 import { ROLES_NAME } from "@ecom/utils/Constants.js";
+import RedisService from "../redis/redisService.js";
 
 const __filename = fileURLToPath(import.meta.url);
 let logger = logs(__filename);
@@ -270,10 +271,17 @@ class MasterService {
       returning = GET_ROLES_SUPER_ADMIN;
     }
     try {
+      const KEY = `ROLES_LIST_${role}`;
       logger.info(`MasterService.getAllRoles called :`);
-      return knex(`${ENVIRONMENT.KNEX_SCHEMA}.${CONSTANTS.TABLES.ROLE}`).select(
-        returning,
-      );
+      const cachedRoles = await RedisService.get(KEY);
+      if (!cachedRoles) {
+        const roles = await knex(
+          `${ENVIRONMENT.KNEX_SCHEMA}.${CONSTANTS.TABLES.ROLE}`,
+        ).select(returning);
+        await RedisService.set(KEY, roles);
+        return roles;
+      }
+      return cachedRoles;
     } catch (error) {
       logger.error(
         `MasterService.getAllRoles: Error occurred :${inspect(error)}`,

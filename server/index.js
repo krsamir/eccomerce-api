@@ -19,6 +19,7 @@ import {
 import cors from "cors";
 import httpErrors from "http-errors";
 import appRoutes from "./routes.js";
+import { RedisService } from "@ecom/datasource";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -34,6 +35,13 @@ const app = express();
 
 if (ENVIRONMENT.NODE_ENV === "development") {
   app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+}
+
+if (ENVIRONMENT.IS_REDIS_AVAILABLE === "Y") {
+  console.info(
+    "*********************** REDIS ACTIVATED ***********************",
+  );
+  RedisService.getInstance();
 }
 
 app.use(express.json());

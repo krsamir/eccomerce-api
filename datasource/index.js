@@ -13,5 +13,7 @@ export {
   MediaService,
 } from "./services/index.js";
 
-export { DataSourceUtilities };
+import RedisService from "./redis/redisService.js";
+
+export { DataSourceUtilities, RedisService };
 export default knex;

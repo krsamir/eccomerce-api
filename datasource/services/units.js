@@ -2,6 +2,7 @@ import { ENVIRONMENT, logger as logs, CONSTANTS } from "@ecom/utils";
 import knex from "../knexClient.js";
 import { inspect } from "util";
 import { fileURLToPath } from "url";
+import RedisService from "../redis/redisService.js";
 
 const __filename = fileURLToPath(import.meta.url);
 let logger = logs(__filename);
@@ -47,7 +48,8 @@ class UnitService {
     return baseQuery;
   }
 
-  get({ where = {}, returning = "*" }) {
+  async get({ where = {}, returning = "*" }) {
+    const KEY = `UNITS_LIST_`;
     const isWhereAvailable = Object.entries(where)?.length > 0;
 
     const baseQuery = knex(
@@ -57,8 +59,15 @@ class UnitService {
     if (isWhereAvailable) {
       baseQuery?.where({ ...where });
     }
+    const cachedData = await RedisService.get(KEY);
 
-    return baseQuery;
+    if (!cachedData) {
+      const data = await baseQuery;
+      await RedisService.set(KEY, data);
+      return data;
+    }
+
+    return cachedData;
   }
 }
 
