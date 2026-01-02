@@ -98,6 +98,24 @@ class MediaService {
       throw error;
     }
   }
+
+  async updateSequenceofImages({ payload }) {
+    try {
+      logger.info(`MediaService.updateSequenceofImages called :`);
+      const batch = (payload ?? []).map(({ id, sequence }) =>
+        knex(`${ENVIRONMENT.KNEX_SCHEMA}.${CONSTANTS.TABLES.MEDIA_DRAFT}`)
+          .update({ sequence })
+          .where({
+            id,
+          }),
+      );
+      return !(await Promise.all(batch)).some((v) => v === 0);
+    } catch (error) {
+      logger.error(`
+        MediaService.updateSequenceofImages: Error occurred : ${inspect(error)}`);
+      throw error;
+    }
+  }
 }
 
 export default new MediaService();

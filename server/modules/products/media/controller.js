@@ -73,6 +73,27 @@ class MediaController {
       throw error;
     }
   }
+
+  async updateSequenceofImages(req, res) {
+    try {
+      const body = req.body;
+      logger.info(`MediaController.updateSequenceofImages called :`);
+      const data = await MediaService.updateSequenceofImages({
+        payload: body,
+      });
+
+      return res.status(RESPONSE_STATUS.OK_200).send({
+        message: data ? "Order saved." : "Unable to save order of media.",
+        status: data ? CONSTANTS.STATUS.SUCCESS : CONSTANTS.STATUS.FAILURE,
+        data,
+        keepSnakeCase: true,
+      });
+    } catch (error) {
+      logger.error(`
+        MediaController.updateSequenceofImages: Error occurred : ${inspect(error)}`);
+      throw error;
+    }
+  }
 }
 
 export default new MediaController();

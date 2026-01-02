@@ -8,6 +8,16 @@ class SchemaValidator {
       }),
     };
   }
+  orderProducts() {
+    return {
+      [Segments.BODY]: Joi.array().items(
+        Joi.object({
+          id: Joi.string().required(),
+          sequence: Joi.number().required(),
+        }),
+      ),
+    };
+  }
 }
 
 export default new SchemaValidator();
