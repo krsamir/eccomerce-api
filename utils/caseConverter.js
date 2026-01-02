@@ -53,7 +53,7 @@ export const toCamelCase = (obj) => {
 export const interceptResponse = (req, res, next) => {
   const originalJson = res.json;
   res.json = function (data) {
-    if (data.keepSnakeCase) {
+    if (data.keepSnakeCase || data?.error?.err?.isAxiosError) {
       delete data.keepSnakeCase;
       return originalJson.call(this, data);
     }

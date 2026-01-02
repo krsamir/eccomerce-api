@@ -89,11 +89,11 @@ app.use((err, req, res, next) => {
         }
       : { message: "Internal server error.", status: CONSTANTS.STATUS.FAILURE };
 
-  const STATUS =
-    err.name === "NotFoundError"
+  const STATUS = err.isAxiosError
+    ? err.status
+    : err.name === "NotFoundError"
       ? RESPONSE_STATUS.NOT_FOUND_404
       : RESPONSE_STATUS.INTERNAL_SERVER_ERROR_500;
-
   res.status(STATUS).send(error);
 });
 

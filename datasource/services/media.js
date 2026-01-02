@@ -68,6 +68,36 @@ class MediaService {
       throw error;
     }
   }
+
+  async deleteMedia({ id, reqId }) {
+    try {
+      logger.info(`MediaService.deleteMedia called :`);
+      const { data } = await axiosInstance.delete(
+        `${ENVIRONMENT.MEDIA_SERVER_HOST}/api/media/${id}`,
+        {
+          headers: {
+            [CONSTANTS.HEADERS.COORELATION_ID]: reqId,
+            [CONSTANTS.HEADERS.M_TOKEN]: ENVIRONMENT.MEDIA_SERVICE_TOKEN,
+          },
+        },
+      );
+      if (data?.status === CONSTANTS.STATUS.SUCCESS) {
+        const stat = await knex(
+          `${ENVIRONMENT.KNEX_SCHEMA}.${CONSTANTS.TABLES.MEDIA_DRAFT}`,
+        )
+          .delete()
+          .where({
+            id,
+          });
+        return stat === 1;
+      }
+      return false;
+    } catch (error) {
+      logger.error(`
+        MediaService.deleteMedia: Error occurred : ${inspect(error)}`);
+      throw error;
+    }
+  }
 }
 
 export default new MediaService();

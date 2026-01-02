@@ -50,6 +50,29 @@ class MediaController {
       throw error;
     }
   }
+  async deleteMedia(req, res) {
+    try {
+      const { id } = req.params;
+      logger.info(`MediaController.deleteMedia called :`);
+      const data = await MediaService.deleteMedia({
+        id,
+        reqId: req.headers[CONSTANTS.HEADERS.COORELATION_ID],
+      });
+
+      return res.status(RESPONSE_STATUS.OK_200).send({
+        message: data
+          ? "Media Deleted succesfully."
+          : "Unable to delete Media.",
+        status: data ? CONSTANTS.STATUS.SUCCESS : CONSTANTS.STATUS.FAILURE,
+        data,
+        keepSnakeCase: true,
+      });
+    } catch (error) {
+      logger.error(`
+        MediaController.deleteMedia: Error occurred : ${inspect(error)}`);
+      throw error;
+    }
+  }
 }
 
 export default new MediaController();

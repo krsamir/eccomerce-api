@@ -6,4 +6,5 @@ export default express
   .Router({ mergeParams: true })
   .use(isAuthenticated)
   .post("/", Controller.postMedia.bind(Controller))
-  .get("/list/:productId", Controller.getListByProductId.bind(Controller));
+  .get("/list/:productId", Controller.getListByProductId.bind(Controller))
+  .delete("/:id", Controller.deleteMedia.bind(Controller));
