@@ -30,6 +30,26 @@ class MediaController {
       throw error;
     }
   }
+
+  async getListByProductId(req, res) {
+    try {
+      const { productId } = req.params;
+      logger.info(`MediaController.getListByProductId called :`);
+      const data = await MediaService.getListByProductId({ productId });
+      if (data) {
+        return res.status(RESPONSE_STATUS.OK_200).send({
+          message: "",
+          status: CONSTANTS.STATUS.SUCCESS,
+          data,
+          keepSnakeCase: true,
+        });
+      }
+    } catch (error) {
+      logger.error(`
+        MediaController.getListByProductId: Error occurred : ${inspect(error)}`);
+      throw error;
+    }
+  }
 }
 
 export default new MediaController();

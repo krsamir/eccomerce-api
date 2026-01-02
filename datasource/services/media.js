@@ -53,6 +53,21 @@ class MediaService {
       throw error;
     }
   }
+
+  async getListByProductId({ productId }) {
+    try {
+      logger.info(`MediaService.getListByProductId called :`);
+      return knex(`${ENVIRONMENT.KNEX_SCHEMA}.${CONSTANTS.TABLES.MEDIA_DRAFT}`)
+        .select("*")
+        .where({
+          product_id: productId,
+        });
+    } catch (error) {
+      logger.error(`
+        MediaService.getListByProductId: Error occurred : ${inspect(error)}`);
+      throw error;
+    }
+  }
 }
 
 export default new MediaService();

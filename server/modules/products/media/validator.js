@@ -1,10 +1,10 @@
 import { Joi, Segments } from "celebrate";
 
 class SchemaValidator {
-  getHsnByNameAndCode() {
+  getListByProductId() {
     return {
-      [Segments.QUERY]: Joi.object({
-        name: Joi.string().required(),
+      [Segments.PARAMS]: Joi.object({
+        productId: Joi.string().required(),
       }),
     };
   }
