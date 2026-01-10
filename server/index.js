@@ -52,7 +52,8 @@ app.use(interceptBody);
 app.use(interceptResponse);
 
 app.use((req, res, next) => {
-  const regex = /^\/api\/(master|product|location|entity|product)(?:\/.*)?$/;
+  const regex =
+    /^\/api\/(master|product|location|entity|product|workflow)(?:\/.*)?$/;
   if (regex.test(req.path)) {
     logger.info(CONSTANTS.ROUTE_LOGS);
   }

@@ -146,7 +146,12 @@ class ProductService {
 
       const metadata = { entity_id: entityId, created_by: reqId };
 
-      const { id, ...payload } = { ...productPayload, updated_by: reqId };
+      const { id, ...payload } = {
+        ...productPayload,
+        updated_by: reqId,
+        status: CONSTANTS.PRODUCT_WORKFLOW.PENDING,
+        master_hash: null,
+      };
 
       const isProductKeyAvailable = Object.keys(payload ?? {})?.length > 0;
 
@@ -256,6 +261,7 @@ class ProductService {
           "unit",
           "unit_type",
           "uuid",
+          "status",
         ])
         .orderBy("updated_at", "desc")
         .limit(CONSTANTS.PER_PAGE_NUMBER_OF_ROWS)
@@ -299,6 +305,8 @@ class ProductService {
           "p.unit_type",
           "p.is_active",
           "p.is_deleted",
+          "p.status",
+          "p.master_hash",
           "p.updated_at",
           knex.raw(`
       (

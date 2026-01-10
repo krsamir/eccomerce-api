@@ -54,6 +54,12 @@ const CONSTANTS = Object.freeze({
     APP: "APP",
   },
   PER_PAGE_NUMBER_OF_ROWS: 10,
+  PRODUCT_WORKFLOW: {
+    INITIALIZED: "INITIALIZED",
+    PENDING: "PENDING",
+    FAILED: "FAILED",
+    COMPLETED: "COMPLETED",
+  },
 });
 
 const RESPONSE_STATUS = Object.freeze({
@@ -100,6 +106,14 @@ const ROLES_NAME = {
   USER: "USER",
 };
 
+const EVENT_NAME = Object.freeze({
+  ADD_PRODUCT_FOR_PUBLISH: "ADD_PRODUCT_FOR_PUBLISH",
+});
+
+const QUEUE_HANDLERS = Object.freeze({
+  PUBLISH_PRODUCTS: "PUBLISH_PRODUCTS",
+});
+
 export {
   CONSTANTS,
   RESPONSE_STATUS,
@@ -107,4 +121,6 @@ export {
   ROLES,
   ROLES_MAP,
   ROLES_ID_MAP_BY_NAME,
+  EVENT_NAME,
+  QUEUE_HANDLERS,
 };

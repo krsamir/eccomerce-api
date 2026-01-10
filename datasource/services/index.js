@@ -7,6 +7,7 @@ import HSNService from "./hsns.js";
 import UnitService from "./units.js";
 import TemplatesService from "./templates.js";
 import MediaService from "./media.js";
+import WorkflowService from "./workflow.js";
 
 export {
   MasterService,
@@ -18,4 +19,5 @@ export {
   UnitService,
   TemplatesService,
   MediaService,
+  WorkflowService,
 };

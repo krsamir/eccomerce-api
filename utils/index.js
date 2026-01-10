@@ -8,6 +8,8 @@ import {
   ROLES_MAP,
   ROLES,
   ROLES_ID_MAP_BY_NAME,
+  EVENT_NAME,
+  QUEUE_HANDLERS,
 } from "./Constants.js";
 import interceptBody from "./interceptBody.js";
 import {
@@ -50,4 +52,6 @@ export {
   ROLES,
   ROLES_ID_MAP_BY_NAME,
   axiosInstance,
+  EVENT_NAME,
+  QUEUE_HANDLERS,
 };
