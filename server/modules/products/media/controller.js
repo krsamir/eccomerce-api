@@ -52,11 +52,12 @@ class MediaController {
   }
   async deleteMedia(req, res) {
     try {
-      const { id } = req.params;
+      const { id, productId } = req.params;
       logger.info(`MediaController.deleteMedia called :`);
       const data = await MediaService.deleteMedia({
         id,
         reqId: req.headers[CONSTANTS.HEADERS.COORELATION_ID],
+        productId,
       });
 
       return res.status(RESPONSE_STATUS.OK_200).send({
@@ -80,6 +81,7 @@ class MediaController {
       logger.info(`MediaController.updateSequenceofImages called :`);
       const data = await MediaService.updateSequenceofImages({
         payload: body,
+        productId: req.params.productId,
       });
 
       return res.status(RESPONSE_STATUS.OK_200).send({

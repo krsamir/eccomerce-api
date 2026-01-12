@@ -16,6 +16,9 @@ class SchemaValidator {
           sequence: Joi.number().required(),
         }),
       ),
+      [Segments.PARAMS]: Joi.object({
+        productId: Joi.string().required(),
+      }),
     };
   }
 }

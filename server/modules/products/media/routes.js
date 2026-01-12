@@ -9,7 +9,7 @@ export default express
   .use(isAuthenticated)
   .post("/", Controller.postMedia.bind(Controller))
   .patch(
-    "/order",
+    "/:productId/order",
     celebrate(validator.orderProducts()),
     interceptPayloadRequest,
     Controller.updateSequenceofImages.bind(Controller),
@@ -19,4 +19,4 @@ export default express
     celebrate(validator.getListByProductId()),
     Controller.getListByProductId.bind(Controller),
   )
-  .delete("/:id", Controller.deleteMedia.bind(Controller));
+  .delete("/:productId/:id", Controller.deleteMedia.bind(Controller));

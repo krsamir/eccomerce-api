@@ -13,6 +13,17 @@ const __filename = fileURLToPath(import.meta.url);
 let logger = logs(__filename);
 
 class MediaService {
+  updateProductStatus(body) {
+    return knex(`${ENVIRONMENT.KNEX_SCHEMA}.${CONSTANTS.TABLES.PRODUCTS_DRAFT}`)
+      .update({ status: CONSTANTS.PRODUCT_WORKFLOW.PENDING })
+      .where({
+        uuid: body?.productId,
+      })
+      .andWhereNot({
+        status: CONSTANTS.PRODUCT_WORKFLOW.INITIALIZED,
+      });
+  }
+
   async postMedia({ file, body, reqId, entityId }) {
     try {
       logger.info(`MediaService.postMedia called :`);
@@ -33,20 +44,23 @@ class MediaService {
         },
       );
       const media = response?.data?.data;
-      return knex(`${ENVIRONMENT.KNEX_SCHEMA}.${CONSTANTS.TABLES.MEDIA_DRAFT}`)
-        .insert({
-          id: media?.id,
-          original_name: media?.originalName,
-          file_name: media?.fileName,
-          path: media?.path,
-          size: media?.size,
-          mime_type: media?.mimeType,
-          sequence: body?.sequence,
-          product_id: body?.productId,
-          is_draft: true,
-          entity_id: entityId,
-        })
-        .returning(["*"]);
+      return await Promise.all([
+        knex(`${ENVIRONMENT.KNEX_SCHEMA}.${CONSTANTS.TABLES.MEDIA_DRAFT}`)
+          .insert({
+            id: media?.id,
+            original_name: media?.originalName,
+            file_name: media?.fileName,
+            path: media?.path,
+            size: media?.size,
+            mime_type: media?.mimeType,
+            sequence: body?.sequence,
+            product_id: body?.productId,
+            is_draft: true,
+            entity_id: entityId,
+          })
+          .returning(["*"]),
+        this.updateProductStatus(body),
+      ]);
     } catch (error) {
       logger.error(`
         MediaService.postMedia: Error occurred : ${inspect(error)}`);
@@ -61,6 +75,7 @@ class MediaService {
         .select("*")
         .where({
           product_id: productId,
+          is_active: true,
         });
     } catch (error) {
       logger.error(`
@@ -69,7 +84,7 @@ class MediaService {
     }
   }
 
-  async deleteMedia({ id, reqId }) {
+  async deleteMedia({ id, reqId, productId }) {
     try {
       logger.info(`MediaService.deleteMedia called :`);
       const { data } = await axiosInstance.delete(
@@ -85,10 +100,11 @@ class MediaService {
         const stat = await knex(
           `${ENVIRONMENT.KNEX_SCHEMA}.${CONSTANTS.TABLES.MEDIA_DRAFT}`,
         )
-          .delete()
+          .update({ is_active: false, sequence: null })
           .where({
             id,
           });
+        await this.updateProductStatus({ productId });
         return stat === 1;
       }
       return false;
@@ -99,7 +115,7 @@ class MediaService {
     }
   }
 
-  async updateSequenceofImages({ payload }) {
+  async updateSequenceofImages({ payload, productId }) {
     try {
       logger.info(`MediaService.updateSequenceofImages called :`);
       const batch = (payload ?? []).map(({ id, sequence }) =>
@@ -109,6 +125,7 @@ class MediaService {
             id,
           }),
       );
+      await this.updateProductStatus({ productId });
       return !(await Promise.all(batch)).some((v) => v === 0);
     } catch (error) {
       logger.error(`
