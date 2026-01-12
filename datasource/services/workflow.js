@@ -8,7 +8,6 @@ import knex from "../knexClient.js";
 import { inspect } from "util";
 import { fileURLToPath } from "url";
 import BullQueue from "@ecom/queue";
-import { ProductService } from "./index.js";
 
 const __filename = fileURLToPath(import.meta.url);
 let logger = logs(__filename);
@@ -29,7 +28,6 @@ class WorkflowService {
     }
   }
   async getProductStatus({ id = "" }) {
-    console.log("🚀 ~ WorkflowService ~ getProductStatus ~ id:", id);
     try {
       logger.info(`WorkflowService.getProductStatus called :`);
       const baseQuery = knex(
