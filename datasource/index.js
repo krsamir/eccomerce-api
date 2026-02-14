@@ -12,6 +12,7 @@ export {
   TemplatesService,
   MediaService,
   WorkflowService,
+  CategoriesService,
 } from "./services/index.js";
 
 import RedisService from "./redis/redisService.js";

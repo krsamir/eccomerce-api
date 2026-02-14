@@ -50,7 +50,7 @@ class RedisService {
     }
 
     logger.info(
-      `🚀 ~ RedisService ~  this.redisInstance ~ instance id: ${this.redisInstance?.id}`,
+      `🚀 ~ RedisService ~ ${ENVIRONMENT.NODE_APP_NAME} ~  this.redisInstance ~ instance id: ${this.redisInstance?.id}`,
     );
     return this.redisInstance;
   }
@@ -62,7 +62,7 @@ class RedisService {
     try {
       logger.info(`RedisService.get ${this.redisInstance.id} called :${key}`);
       const value = await this.redisInstance.get(
-        `${ENVIRONMENT.NODE_ENV}_${key}`,
+        `${ENVIRONMENT.NODE_ENV}_${ENVIRONMENT.NODE_APP_NAME}_${key}`,
       );
       return value ? JSON.parse(value) : null;
     } catch (error) {
@@ -77,7 +77,7 @@ class RedisService {
       }
       logger.info(`RedisService.set ${this.redisInstance.id} called :${key}`);
       await this.redisInstance.set(
-        `${ENVIRONMENT.NODE_ENV}_${key}`,
+        `${ENVIRONMENT.NODE_ENV}_${ENVIRONMENT.NODE_APP_NAME}_${key}`,
         JSON.stringify(value),
         "EX",
         expiry,
@@ -98,7 +98,7 @@ class RedisService {
         `RedisService.delete ${this.redisInstance.id} called :${key}`,
       );
       const result = await this.redisInstance.del(
-        `${ENVIRONMENT.NODE_ENV}_${key}`,
+        `${ENVIRONMENT.NODE_ENV}_${ENVIRONMENT.NODE_APP_NAME}_${key}`,
       );
       return result === "OK";
     } catch (error) {

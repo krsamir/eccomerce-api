@@ -43,6 +43,9 @@ const CONSTANTS = Object.freeze({
     PRODUCTS_DRAFT: "products_draft",
     MEDIA: "media",
     MEDIA_DRAFT: "media_draft",
+    CATEGORIES: "categories",
+    CATEGORIES_DRAFT: "categories_draft",
+    CATEGORIES_PRODUCT_MAPPER: "categories_product_mapper",
   },
   AUTHENTICATION: {
     TOKEN_VALIDITY_IN_MINS: 10,

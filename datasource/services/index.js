@@ -8,6 +8,7 @@ import UnitService from "./units.js";
 import TemplatesService from "./templates.js";
 import MediaService from "./media.js";
 import WorkflowService from "./workflow.js";
+import CategoriesService from "./categories.js";
 
 export {
   MasterService,
@@ -20,4 +21,5 @@ export {
   TemplatesService,
   MediaService,
   WorkflowService,
+  CategoriesService,
 };
