@@ -18,6 +18,7 @@ class CategoriesController {
         is_active,
         is_favourite,
         role: req?.role,
+        entity_id: req.entityId,
       });
       if (data) {
         return res.status(RESPONSE_STATUS.OK_200).send({
@@ -47,6 +48,25 @@ class CategoriesController {
     } catch (error) {
       logger.error(
         `CategoriesController.getAllCategoriesList: Error occurred : ${inspect(error)}`,
+      );
+      throw error;
+    }
+  }
+
+  async getStepsCategoriesList(req, res) {
+    try {
+      logger.info(`CategoriesController.getStepsCategoriesList called :`);
+      const data = await CategoriesService.getStepsCategoriesList({
+        role: req?.role,
+      });
+      return res.status(RESPONSE_STATUS.OK_200).send({
+        message: "",
+        status: CONSTANTS.STATUS.SUCCESS,
+        data,
+      });
+    } catch (error) {
+      logger.error(
+        `CategoriesController.getStepsCategoriesList: Error occurred : ${inspect(error)}`,
       );
       throw error;
     }

@@ -48,13 +48,6 @@ class CategoriesService {
         let baseQuery = knex(
           `${ENVIRONMENT.KNEX_SCHEMA}.${CONSTANTS.TABLES.CATEGORIES_DRAFT}`,
         ).select(returning);
-        // .join(
-        //   CONSTANTS.TABLES.LOCATION,
-        //   `${CONSTANTS.TABLES.ENTITY}.location_id`,
-        //   "=",
-        //   `${CONSTANTS.TABLES.LOCATION}.id`,
-        // );
-
         if (role !== ROLES_NAME.SUPER_ADMIN) {
           baseQuery?.where({
             is_active: true,
@@ -72,9 +65,6 @@ class CategoriesService {
       }
 
       return categories;
-      // .map((item) =>
-      //   TRANSFORMERS.entityLocationTransformers(item),
-      // );
     } catch (error) {
       logger.error(
         `CategoriesService.getAllCategoriesList: Error occurred :${inspect(error)}`,
@@ -83,6 +73,61 @@ class CategoriesService {
     }
   }
 
+  async getStepsCategoriesList({ role }) {
+    // let returning = GET_CATEGORIES_NON_ADMIN;
+    // if (role === ROLES_NAME.SUPER_ADMIN) {
+    //   returning = GET_ALL_CATEGORIES_RETURNING;
+    // }
+    const key = "GET_CATEGORIES_ARRANGED";
+
+    try {
+      logger.info(`CategoriesService.getStepsCategoriesList called :`);
+      let categories = await RedisService.get(key);
+
+      if (!categories) {
+        let baseQuery = knex(
+          `${ENVIRONMENT.KNEX_SCHEMA}.${CONSTANTS.TABLES.CATEGORIES_DRAFT} as t1`,
+        )
+          .select(
+            "t1.*",
+            knex.raw(`
+                  COALESCE(
+          json_agg(
+           t2.*
+          ) FILTER (WHERE t2.id IS NOT NULL),
+          '[]'
+        ) AS children
+            `),
+          )
+          .innerJoin(
+            `${ENVIRONMENT.KNEX_SCHEMA}.${CONSTANTS.TABLES.CATEGORIES_DRAFT} as t2`,
+            `t1.id`,
+            "=",
+            `t2.parent_id`,
+          )
+
+          .groupBy("t1.id");
+
+        if (role !== ROLES_NAME.SUPER_ADMIN) {
+          baseQuery?.where({
+            is_active: true,
+          });
+        }
+
+        baseQuery.orderBy(`t1.created_at`, "desc");
+        const result = await baseQuery;
+        await RedisService.set(key, result);
+        categories = result;
+      }
+
+      return categories;
+    } catch (error) {
+      logger.error(
+        `CategoriesService.getStepsCategoriesList: Error occurred :${inspect(error)}`,
+      );
+      throw error;
+    }
+  }
   async createCategory({
     name,
     parent_id,
@@ -90,6 +135,7 @@ class CategoriesService {
     is_active,
     is_favourite,
     role,
+    entity_id,
   }) {
     try {
       logger.info(`CategoriesService.createCategory called :`);
@@ -100,7 +146,7 @@ class CategoriesService {
       return knex(
         `${ENVIRONMENT.KNEX_SCHEMA}.${CONSTANTS.TABLES.CATEGORIES_DRAFT}`,
       )
-        .insert({ name, parent_id, rank, is_active, is_favourite })
+        .insert({ name, parent_id, rank, is_active, is_favourite, entity_id })
         .returning("id");
     } catch (error) {
       logger.error(`
@@ -109,7 +155,7 @@ class CategoriesService {
     }
   }
 
-  async getCategoryById({ id }) {
+  async getCategoryById({ id = null }) {
     try {
       logger.info(`CategoriesService.getCategoryById called :`);
       return knex(
@@ -174,7 +220,6 @@ class CategoriesService {
           path: media?.path,
           size: media?.size,
           mime_type: media?.mimeType,
-          entity_id,
           media_id: media?.id,
         })
         .where({ id })

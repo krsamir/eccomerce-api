@@ -13,6 +13,7 @@ export default express
   .Router({ mergeParams: true })
   .use(isAuthenticated)
   .get("/", Controller.getAllCategoriesList.bind(Controller))
+  .get("/steps", Controller.getStepsCategoriesList.bind(Controller))
   .post(
     "/",
     celebrate(validator.createCategory()),
@@ -26,7 +27,7 @@ export default express
   )
   .get(
     "/:id",
-    celebrate(validator.createCategory()),
+    celebrate(validator.getCategoryById()),
     Controller.getCategoryById.bind(Controller),
   )
   .patch(
