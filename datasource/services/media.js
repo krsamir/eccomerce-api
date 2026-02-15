@@ -55,7 +55,6 @@ class MediaService {
             mime_type: media?.mimeType,
             sequence: body?.sequence,
             product_id: body?.productId,
-            is_draft: true,
             entity_id: entityId,
           })
           .returning(["*"]),

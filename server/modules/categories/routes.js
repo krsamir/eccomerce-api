@@ -19,6 +19,11 @@ export default express
     interceptPayloadRequest,
     Controller.createCategory.bind(Controller),
   )
+  .post(
+    "/sync",
+    CAPABILITY([ROLES_NAME.SUPER_ADMIN]),
+    Controller.syncCategories.bind(Controller),
+  )
   .get(
     "/:id",
     celebrate(validator.createCategory()),

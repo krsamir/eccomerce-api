@@ -3,6 +3,7 @@ import {
   logger as logs,
   CONSTANTS,
   axiosInstance,
+  EVENT_NAME,
 } from "@ecom/utils";
 import { fileURLToPath } from "url";
 import knex from "../knexClient.js";
@@ -10,6 +11,7 @@ import { inspect } from "util";
 import { ROLES_NAME } from "@ecom/utils/Constants.js";
 import RedisService from "../redis/redisService.js";
 import FormData from "form-data";
+import BullQueue from "@ecom/queue";
 
 const __filename = fileURLToPath(import.meta.url);
 let logger = logs(__filename);
@@ -220,6 +222,21 @@ class CategoriesService {
     } catch (error) {
       logger.error(`
         CategoriesService.deleteMedia: Error occurred : ${inspect(error)}`);
+      throw error;
+    }
+  }
+  async syncCategories() {
+    logger.info(`CategoriesService.syncCategories called :`);
+
+    try {
+      await BullQueue.addToQueue({
+        eventName: EVENT_NAME.SYNC_CATEGORIES_TABLE,
+        data: [],
+      });
+      return true;
+    } catch (error) {
+      logger.error(`
+        CategoriesService.syncCategories: Error occurred : ${inspect(error)}`);
       throw error;
     }
   }

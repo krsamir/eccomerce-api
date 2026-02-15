@@ -146,6 +146,22 @@ class CategoriesController {
       throw error;
     }
   }
+  async syncCategories(req, res) {
+    try {
+      logger.info(`CategoriesController.syncCategories called :`);
+      const data = await CategoriesService.syncCategories({});
+
+      return res.status(RESPONSE_STATUS.OK_200).send({
+        message: "",
+        status: CONSTANTS.STATUS.SUCCESS,
+        data,
+      });
+    } catch (error) {
+      logger.error(`
+        CategoriesController.syncCategories: Error occurred : ${inspect(error)}`);
+      throw error;
+    }
+  }
 }
 
 export default new CategoriesController();

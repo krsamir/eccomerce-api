@@ -46,6 +46,7 @@ const CONSTANTS = Object.freeze({
     CATEGORIES: "categories",
     CATEGORIES_DRAFT: "categories_draft",
     CATEGORIES_PRODUCT_MAPPER: "categories_product_mapper",
+    CATEGORIES_PRODUCT_MAPPER_DRAFT: "categories_product_mapper_draft",
   },
   AUTHENTICATION: {
     TOKEN_VALIDITY_IN_MINS: 10,
@@ -111,6 +112,7 @@ const ROLES_NAME = {
 
 const EVENT_NAME = Object.freeze({
   ADD_PRODUCT_FOR_PUBLISH: "ADD_PRODUCT_FOR_PUBLISH",
+  SYNC_CATEGORIES_TABLE: "SYNC_CATEGORIES_TABLE",
 });
 
 const QUEUE_HANDLERS = Object.freeze({
